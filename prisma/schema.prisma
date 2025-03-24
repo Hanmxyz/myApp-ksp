@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusAktif {
+  yes
+  no
+}
+
+
+enum UserLevel {
+  admin
+  kasir
+}
+
+model tbKategori {
+  id Int  @id @db.VarChar(10)
+  nama          String  @db.VarChar(40)
+  aktif   StatusAktif @default(yes) 
+  barang        tbBarang[] //apakah perlu membawa nama
+}
+
+
+model tbBarang {
+  id  Int  @id @db.VarChar(10)
+  nama_barang  String  @db.VarChar(40)
+  hargaBeli    Int
+  hargaEcer    Int
+  hargaGrosir  Int
+  stock        Int
+  stock_min    Int
+  barcode      String  @unique @db.VarChar(50)
+  gambar       String  @db.VarChar(100)
+  kategoriId String  @db.VarChar(10)
+  ukuran       Int
+  satuan       String  @db.VarChar(20)
+  aktif   StatusAktif @default(yes) 
+
+  kategori tbKategori @relation(fields: [id], references: [kategoriId])
+}
+
+
+model tbSatuan {
+  id String  @id @db.VarChar(10)
+  nama        String  @db.VarChar(40)
+  aktif   StatusAktif @default(yes)  //apakah perlu membawa nama
+}
+
+model tbAnggota {
+  NIP            String  @id @db.VarChar(10)
+  Nama_Anggota   String? @db.VarChar(50)
+  Nomor_rekening String  @unique @db.VarChar(20)
+  bank           String  @db.VarChar(20)
+  no_hp          String  @db.VarChar(15)
+  Alamat         String  @db.Text
+  Limit_Piutang  Int
+  aktif          StatusAktif  @default(yes) 
+}
+
+
+model tbDetail_Pengurus {
+  id      String  @id @db.VarChar(10)
+  tahun            Int     @db.Year
+  nip              String  @db.VarChar(20) // HARUS SCALAR
+  kode_pengurus    String  @db.VarChar(20) // HARUS SCALAR
+  tgl_menjabat     DateTime @db.Date
+  tgl_akhirmenjabat DateTime @db.Date
+  tunjangan        Decimal? @db.Decimal(10,2)
+  aktif           StatusAktif @default(yes)
+
+  // Relasi ke tbAnggota dan tbPengurus
+  pengurus  tbPengurus @relation(fields: [id], references: [kode_pengurus])
+}
+
+
+model tbPengurus {
+  id String  @id @db.VarChar(10)
+  nama          String  @db.VarChar(50)
+  aktif          StatusAktif @default(yes) 
+  detail_pengurusId tbDetail_Pengurus[]
+}
+
+model Supplier {
+  kode_sup   String  @id @db.VarChar(10)
+  nama       String  @db.VarChar(100)
+  alamat     String  @db.Text
+  no_HP      String  @db.VarChar(15)
+  perusahaan String  @db.VarChar(100)
+  aktif      StatusAktif
+}
+
+model Petugas {
+  kode_petugas String  @id @db.VarChar(10)
+  nama         String  @db.VarChar(100)
+  no_hp        String  @db.VarChar(15)
+  username     String  @unique @db.VarChar(50)
+  pass         String  @db.VarChar(255)
+  aktif        StatusAktif
+  level        UserLevel
+}
