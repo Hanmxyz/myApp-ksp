@@ -1,52 +1,52 @@
-class BarangController {
-    constructor(BarangUsecase) {
-        this.BarangUsecase = BarangUsecase;
+class ProductsHandler {
+    constructor(ProductsUsecase) {
+        this.ProductsUsecase = ProductsUsecase;
     }
 
-    async getAllBarang(req,res) {
+    async getAllProducts(req,res) {
         try {
-            const barang = await this.BarangUsecase.getAllBarang();
-            res.json(barang);
+            const data = await this.ProductsUsecase.getAllProducts();
+            res.json(data);
         } catch (err) {
             res.status(500).json({ message: err.message });
         };
     }
 
-    async getBarangById(req,res) {
+    async getProductById(req,res) {
         try {
             const id = req.params.id
-            const barang = await this.BarangUsecase.getBarangById(id);
-            res.json(barang);
+            const data = await this.ProductsUsecase.getProductById(id);
+            res.json(data);
         } catch(err) {
             res.status(500).json({ message :  err.message })
         }
     }
 
-    async createBarang(req,res) {
+    async createProduct(req,res) {
         try {
-            const barang =  req.body;
-            await this.BarangUsecase.createBarang(barang);
+            const product =  req.body;
+            await this.ProductsUsecase.createProduct(product);
             res.json({message : true})
         } catch(err) {
             res.status(500).json({message :  err.message })
         }
     }
 
-    async updateBarang(req, res) {
+    async updateProduct(req, res) {
         try {
-            const barang = req.body;
+            const product = req.body;
             const id = req.params.id;
-            await this.BarangUsecase.updateBarang(id, barang);
+            await this.ProductsUsecase.updateProduct(id, product);
             res.json({message : true})
         } catch(err) {
             res.status(500).json({ message :  err.message })
         }
     }
 
-    async deleteBarang(req,res) {
+    async deleteProduct(req,res) {
         try {
             const id = req.params.id;
-            await this.BarangUsecase.deleteBarang(id);
+            await this.ProductsUsecase.deleteProduct(id);
             res.json({ message : true })
         } catch(err) {
             res.status(500).json({message : err.message })
@@ -54,4 +54,4 @@ class BarangController {
     }
 }
 
-export default BarangController;
+export default ProductsHandler;
