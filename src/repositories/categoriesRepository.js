@@ -1,6 +1,6 @@
-import { prisma } from "../../server";
+import { prisma } from "../../server.js";
 
-export class CategoriesRepository {
+export default class CategoriesRepository {
     async getAllCategories() {
         return await prisma.category.findMany();
     }
