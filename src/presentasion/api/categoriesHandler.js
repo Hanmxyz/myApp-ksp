@@ -12,6 +12,16 @@ export default class CategoriesHandler {
         }
     }
 
+    async getCategoryById(req,res) {
+        try {
+            const id = req.params.id
+            const data = await this.CategoriesUsecase.getCategoryById(id);
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({message : error.message})
+        }
+    }
+
     async createCategory(req,res) {
         try {
             const data = req.body
