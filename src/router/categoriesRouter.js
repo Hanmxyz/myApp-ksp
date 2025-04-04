@@ -13,5 +13,6 @@ router.post('/category', (req,res) => {categoriesHandler.createCategory(req,res)
 router.get('/category/:id', (req,res) => {categoriesHandler.getCategoryById(req,res)})
 router.put('/category/:id', (req,res) => {categoriesHandler.updateCategory(req,res)})
 router.delete('/category/:id', (req,res) => {categoriesHandler.deleteCategory(req,res)})
+router.get('/product/category/:id', (req,res) => {categoriesHandler.getProductByCategoryId(req,res)})
 
 export default router

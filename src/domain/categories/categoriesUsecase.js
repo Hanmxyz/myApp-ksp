@@ -22,4 +22,8 @@ export default class CategoriesUsecase {
     async deleteCategory(id) {
         return await this.categoriesRepository.deleteCategory(id)
     }
+
+    async getProductByCategoryId(id) {
+        return await this.categoriesRepository.getProductByCategoryId(id)
+    }
 }

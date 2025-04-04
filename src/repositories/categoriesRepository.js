@@ -37,4 +37,13 @@ export default class CategoriesRepository {
             where: {id: Number(id)}
         })
     }
+
+    async getProductByCategoryId(id) {
+        return await prisma.category.findUnique({
+            where : {id : Number(id)},
+            include : {
+                products : true,
+            }
+        })
+    }
 }
