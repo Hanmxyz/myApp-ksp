@@ -29,6 +29,7 @@ model Category {
   name      String      @db.VarChar(40)
   isActive  StatusActive @default(YES)
   products  Product[]
+  vendorProducts VendorProduct[]
   createdAt DateTime    @default(now())
   updatedAt DateTime?    @updatedAt
 }
@@ -40,6 +41,7 @@ model Product {
   retailPrice   Int
   wholesalePrice Int
   stock        Int
+  stocks       Stock[]
   minStock     Int
   barcode      String      @unique @db.VarChar(50)
   image        String?      @db.VarChar(100)
@@ -120,5 +122,43 @@ model Staff {
   level        UserLevel
   createdAt    DateTime    @default(now())
   updatedAt    DateTime?    @updatedAt
+}
+
+model Vendor {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(40)
+  phoneNumber     String            @db.VarChar(15)
+  address         String            @db.Text
+  isActive        StatusActive      @default(YES)
+  products        VendorProduct[]       
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?    @updatedAt
+}
+
+
+model VendorProduct {
+  id              Int               @id @default(autoincrement())
+  vendorId        Int
+  name            String            @db.VarChar(40)
+  categoryId      Int
+  sellPrice       Float
+  profitPercent   Float             
+  entryDate       DateTime          @default(now())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?    @updatedAt
+
+  vendor     Vendor   @relation(fields: [vendorId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  
+}
+
+model Stock {
+  id                   Int               @id @default(autoincrement())
+  productId            Int              
+  purchasePrice        Int
+  stock                Int 
+  entryDate            DateTime     @default(now())
+
+  product    Product @relation(fields : [productId], references : [id])
 }
 
