@@ -162,3 +162,46 @@ model Stock {
   product    Product @relation(fields : [productId], references : [id])
 }
 
+model Sale {
+  id          Int           @id @default(autoincrement())
+  saleDate    DateTime
+  staffNip    String
+  totalAmount Float
+  paymentType String       
+  isPaid      Boolean
+  isCash      Boolean
+  details     SaleDetail[] @relation("SaleToDetails")
+}
+
+model SaleDetail {
+  id            Int     @id @default(autoincrement())
+  saleId        Int
+  productCode   String
+  stockCode     String
+  purchasePrice Float
+  salePrice     Float
+  quantity      Int
+  sale          Sale    @relation("SaleToDetails", fields: [saleId], references: [id])
+}
+
+model Purchase {
+  id           Int              @id @default(autoincrement())
+  purchaseDate DateTime
+  supplierCode String
+  totalAmount  Float
+  isPaid       Boolean
+  details      PurchaseDetail[] @relation("PurchaseToDetails")
+}
+
+model PurchaseDetail {
+  id             Int     @id @default(autoincrement())
+  purchaseId     Int
+  productId      Int
+  stockId        Int
+  purchasePrice  Float
+  retailPrice    Float
+  wholesalePrice Float
+  quantity       Int
+  subtotal       Float
+  purchase       Purchase @relation("PurchaseToDetails", fields: [purchaseId], references: [id])
+}
