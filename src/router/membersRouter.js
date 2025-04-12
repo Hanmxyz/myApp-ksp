@@ -1,6 +1,6 @@
 import express from "express"
 import MembersRepository from "../repositories/membersRepository.js"
-import MembersUsecase from "../domain/membersUsecase/membersUsecase.js"
+import MembersUsecase from "../domain/members/membersUsecase.js"
 import MembersHandler from "../presentasion/api/membersHandler.js"
 
 const router = express.Router()

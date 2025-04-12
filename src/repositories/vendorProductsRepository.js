@@ -2,7 +2,12 @@ import { prisma } from "../../server.js"
 
 export default class VendorProductsRepository{
     async getAllVendorProducts() {
-        return await prisma.vendorProduct.findMany()
+        return await prisma.vendorProduct.findMany({
+            include : {
+                vendor : true,
+                category : true
+            }
+        })
     }
 
     async getVendorProductById(id) {

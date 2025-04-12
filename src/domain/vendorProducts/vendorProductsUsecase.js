@@ -4,7 +4,23 @@ export default class VendorProductsUsecase{
     }
 
     async getAllVendorProducts() {
-        return await this.vendorProductsRepository.getAllVendorProducts()
+        const data =  await this.vendorProductsRepository.getAllVendorProducts()
+        const vendorProduct = data.map( p => {
+            return {
+                id  : p.id,
+                vendor : p.vendor.name,
+                name : p.name,
+                category : p.category.name,
+                sellPrice : p.sellPrice,
+                profitPercent : p.profitPercent
+            }
+        })
+
+        return {
+            title : "vendorProduct",
+            header : ["id", "vendor", "name", "category", "sellPrice", "profitPercent"],
+            data : vendorProduct
+        }
     }
 
     async getVendorProductById(id) {

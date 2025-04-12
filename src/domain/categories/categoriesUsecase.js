@@ -4,7 +4,21 @@ export default class CategoriesUsecase {
     }
 
     async getAllCategories() {
-        return await this.categoriesRepository.getAllCategories();
+        const data = await this.categoriesRepository.getAllCategories()
+        const category = data.map(p => {
+            return {
+                id : p.id,
+                name : p.name,
+                isActive : p.isActive
+            }
+        })
+        const newData = {
+            title : "category",
+            header : ["id", "name", "isActive"],
+            data : category
+        }
+
+        return newData
     }
 
     async getCategoryById(id) {
@@ -12,6 +26,7 @@ export default class CategoriesUsecase {
     }
 
     async createCategory(category) {
+        
         return await this.categoriesRepository.createCategory(category)
     }
     

@@ -2,7 +2,11 @@ import { prisma } from "../../server.js"
 
 export default class ProductsRepository {
     async getAllProducts() {
-        return await prisma.product.findMany();
+        return await prisma.product.findMany({
+            include : {
+                category : true
+            }
+        });
     };
     async getProductById(id) {
         return await prisma.product.findUnique({

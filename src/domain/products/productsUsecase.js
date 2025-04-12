@@ -4,7 +4,31 @@ class ProductsUsecase {
     }
 
     async getAllProducts() {
-        return await this.productsRepository.getAllProducts();
+        const data = await this.productsRepository.getAllProducts();
+        const product = data.map( p => {
+            return {
+                id : p.id,
+                name : p.name,
+                purchasePrice : p.purchasePrice,
+                retailPrice : p.retailPrice,
+                wholesalePrice : p.wholesalePrice,
+                stock : p.stock,
+                minStock : p.minStock,
+                barcode : p.barcode,
+                image : p.image,
+                category : p.category.name,
+                size : p.size,
+                unit : p.unit,
+                isActive : p.isActive
+            }
+        })
+        const newData = {
+            title : "product",
+            header : ["id", "name", "purchasePrice", "retailPrice", "wholesalePrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
+            data : product
+        }
+
+        return newData
     }
 
     async getProductById(id) {

@@ -3,7 +3,11 @@ import { prisma } from "../../server.js"
 export default class VendorsRepository {
     
     async getAllVendors() {
-        return await prisma.vendor.findMany()
+        return await prisma.vendor.findMany({
+            include : {
+                products : true
+            }
+        })
     }
 
     async getVendorById(id) {

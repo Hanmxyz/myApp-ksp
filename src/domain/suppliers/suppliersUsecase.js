@@ -4,7 +4,24 @@ export default class SuppliersUsecase {
     } 
 
     async getAllSuppliers() {
-        return await this.suppliersRepository.getAllSuppliers()
+        const data = await this.suppliersRepository.getAllSuppliers()
+        const supplier = data.map( p => {
+            return {
+                id : p.id,
+                name : p.name,
+                address : p.address,
+                phoneNumber : p.phoneNumber,
+                company : p.company,
+                isActive : p.isActive
+            }
+        })
+        const newData = {
+            title :  "supplier",
+            header : ["id","name", "address", "phoneNumber" , "company", "isActive"],
+            data : supplier 
+        }
+
+        return newData
     }
 
     async getSupplierById(id) {
