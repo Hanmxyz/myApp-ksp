@@ -8,6 +8,7 @@ export default class StaffsUsecase {
         const data =await this.staffsRepository.getAllstaffs()
         const staff = data.map( p => {
             return {
+                id : p.id,
                 name : p.name,
                 phoneNumber : p.phoneNumber,
                 username : p.username,
@@ -18,7 +19,7 @@ export default class StaffsUsecase {
         })
         const newData = {
             title : "staff",
-            header :["name","phoneNumber", "username", "password", "isActive", "level"],
+            header :["id","name","phoneNumber", "username", "password", "isActive", "level"],
             data : staff
         }
 

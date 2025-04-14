@@ -12,13 +12,14 @@ export default class VendorProductsUsecase{
                 name : p.name,
                 category : p.category.name,
                 sellPrice : p.sellPrice,
-                profitPercent : p.profitPercent
+                profitPercent : p.profitPercent,
+                entryDate : p.entryDate
             }
         })
 
         return {
             title : "vendorProduct",
-            header : ["id", "vendor", "name", "category", "sellPrice", "profitPercent"],
+            header : ["id", "vendor", "name", "category", "sellPrice", "profitPercent", "entryDate"],
             data : vendorProduct
         }
     }

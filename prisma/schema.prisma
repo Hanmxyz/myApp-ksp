@@ -176,8 +176,8 @@ model Sale {
 model SaleDetail {
   id            Int     @id @default(autoincrement())
   saleId        Int
-  productCode   String
-  stockCode     String
+  productId   String
+  stockId     String
   purchasePrice Float
   salePrice     Float
   quantity      Int

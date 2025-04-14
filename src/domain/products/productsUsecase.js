@@ -5,28 +5,55 @@ class ProductsUsecase {
 
     async getAllProducts() {
         const data = await this.productsRepository.getAllProducts();
-        const product = data.map( p => {
+        const stock = data.stock.map(p => {
             return {
-                id : p.id,
-                name : p.name,
-                purchasePrice : p.purchasePrice,
-                retailPrice : p.retailPrice,
-                wholesalePrice : p.wholesalePrice,
-                stock : p.stock,
-                minStock : p.minStock,
-                barcode : p.barcode,
-                image : p.image,
-                category : p.category.name,
-                size : p.size,
-                unit : p.unit,
-                isActive : p.isActive
+                productId: p.productId,
+                purchasePrice: p.purchasePrice,
+                stock: p.stock
+            }
+        })
+        let result = stock.reduce((acc, curr) => {
+            let existing = acc.find(item => item.productId === curr.productId)
+            if (existing) {
+                existing.stock += curr.stock
+                existing.purchasePrice = Math.max(existing.purchasePrice, curr.purchasePrice);
+            } else {
+                acc.push({ productId: curr.productId, purchasePrice: curr.purchasePrice, stock: curr.stock })
+            }
+            return acc
+        }, [])
+        const updateProduct = data.product.map(product => {
+
+            const update = result.find(u => u.productId === product.id);
+            if (update) {
+                return { ...product, purchasePrice: update.purchasePrice, stock: update.stock + product.stock };
+            }
+            return product;
+        })
+
+        const product = updateProduct.map(p => {
+            return {
+                id: p.id,
+                name: p.name,
+                purchasePrice: p.purchasePrice,
+                retailPrice: p.retailPrice,
+                wholesalePrice: p.wholesalePrice,
+                stock: p.stock,
+                minStock: p.minStock,
+                barcode: p.barcode,
+                image: p.image,
+                category: p.category.name,
+                size: p.size,
+                unit: p.unit,
+                isActive: p.isActive
             }
         })
         const newData = {
-            title : "product",
-            header : ["id", "name", "purchasePrice", "retailPrice", "wholesalePrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
-            data : product
+            title: "product",
+            header: ["id", "name", "purchasePrice", "retailPrice", "wholesalePrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
+            data: product
         }
+
 
         return newData
     }
