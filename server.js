@@ -9,6 +9,7 @@ import supplierRouter from "./src/router/suppliersRouter.js"
 import staffsRouter from "./src/router/staffsRouter.js"
 import vendorsRouter from "./src/router/vendorsRouter.js"
 import vendorProductsRouter from "./src/router/vendorProductsRouter.js"
+import purchasesRouter from "./src/router/purchasesRouter.js"
 import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient();
@@ -28,6 +29,8 @@ app.use("/api", supplierRouter)
 app.use("/api", staffsRouter)
 app.use("/api", vendorsRouter)
 app.use("/api", vendorProductsRouter)
+
+app.use("/api", purchasesRouter)
 app.listen(3000, () => {
     console.log("http://localhost:3000/")
 })

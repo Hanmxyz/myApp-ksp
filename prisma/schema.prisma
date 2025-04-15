@@ -13,11 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum StatusActive {
+enum Status {
   YES
   NO
 }
 
+enum Payment {
+  cash
+  transfer
+}
 
 enum UserLevel {
   admin
@@ -27,7 +31,7 @@ enum UserLevel {
 model Category {
   id        Int         @id @default(autoincrement())
   name      String      @db.VarChar(40)
-  isActive  StatusActive @default(YES)
+  isActive  Status @default(YES)
   products  Product[]
   vendorProducts VendorProduct[]
   createdAt DateTime    @default(now())
@@ -48,17 +52,19 @@ model Product {
   categoryId   Int
   size         Int
   unit         String      @db.VarChar(20)
-  isActive     StatusActive @default(YES)
+  isActive     Status @default(YES)
 
   category     Category    @relation(fields: [categoryId], references: [id])
   createdAt    DateTime    @default(now())
   updatedAt    DateTime?    @updatedAt
+  saleDetails  SaleDetail[]
+  purchaseDetails   PurchaseDetail[]
 }
 
 model ProductUnit {
   id        Int         @id @default(autoincrement())
   name      String      @db.VarChar(40)
-  isActive  StatusActive @default(YES)
+  isActive  Status @default(YES)
   createdAt DateTime    @default(now())
   updatedAt DateTime?    @updatedAt
 }
@@ -71,15 +77,16 @@ model Member {
   phoneNumber String      @db.VarChar(15)
   address     String      @db.Text
   creditLimit Int
-  isActive    StatusActive @default(YES)
+  isActive    Status @default(YES)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime?    @updatedAt
+  sales       Sale[]
 }
 
 model Management {
   id              Int         @id @default(autoincrement())
   name            String      @db.VarChar(50)
-  isActive        StatusActive @default(YES)
+  isActive        Status @default(YES)
   managementDetails ManagementDetail[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime?    @updatedAt
@@ -93,7 +100,7 @@ model ManagementDetail {
   startDate       DateTime    @db.Date
   endDate         DateTime    @db.Date
   allowance       Decimal?    @db.Decimal(10,2)
-  isActive        StatusActive @default(YES)
+  isActive        Status @default(YES)
 
   management      Management  @relation(fields: [managementId], references: [id])
   createdAt       DateTime    @default(now())
@@ -107,9 +114,10 @@ model Supplier {
   address      String      @db.Text
   phoneNumber  String      @db.VarChar(15)
   company      String      @db.VarChar(100)
-  isActive     StatusActive @default(YES)
+  isActive     Status @default(YES)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime?    @updatedAt
+  purchases     Purchase[]
 }
 
 model Staff {
@@ -118,7 +126,7 @@ model Staff {
   phoneNumber  String      @db.VarChar(15)
   username     String      @unique @db.VarChar(50)
   password     String      @db.VarChar(255)
-  isActive     StatusActive @default(YES)
+  isActive     Status @default(YES)
   level        UserLevel
   createdAt    DateTime    @default(now())
   updatedAt    DateTime?    @updatedAt
@@ -129,7 +137,7 @@ model Vendor {
   name            String            @db.VarChar(40)
   phoneNumber     String            @db.VarChar(15)
   address         String            @db.Text
-  isActive        StatusActive      @default(YES)
+  isActive        Status      @default(YES)
   products        VendorProduct[]       
   createdAt DateTime    @default(now())
   updatedAt DateTime?    @updatedAt
@@ -146,7 +154,7 @@ model VendorProduct {
   entryDate       DateTime          @default(now())
   createdAt DateTime    @default(now())
   updatedAt DateTime?    @updatedAt
-
+  
   vendor     Vendor   @relation(fields: [vendorId], references: [id])
   category   Category @relation(fields: [categoryId], references: [id])
   
@@ -160,37 +168,43 @@ model Stock {
   entryDate            DateTime     @default(now())
 
   product    Product @relation(fields : [productId], references : [id])
+  saleDetails          SaleDetail[]
+  PurchaseToDetails    PurchaseDetail[]
 }
 
 model Sale {
   id          Int           @id @default(autoincrement())
-  saleDate    DateTime
-  staffNip    String
+  saleDate    DateTime      @default(now())
+  nip         String
   totalAmount Float
-  paymentType String       
-  isPaid      Boolean
-  isCash      Boolean
-  details     SaleDetail[] @relation("SaleToDetails")
+  paymentType Payment       
+  isPaid      Status
+  isCash      Status
+  details     SaleDetail[] 
+  member      Member    @relation(fields : [nip], references : [nip])
 }
 
 model SaleDetail {
   id            Int     @id @default(autoincrement())
   saleId        Int
-  productId   String
-  stockId     String
+  productId     Int
+  stockId       Int
   purchasePrice Float
   salePrice     Float
   quantity      Int
-  sale          Sale    @relation("SaleToDetails", fields: [saleId], references: [id])
+  sale          Sale    @relation(fields: [saleId], references : [id])
+  product       Product @relation(fields: [productId], references : [id])
+  stock         Stock   @relation(fields: [stockId], references : [id])
 }
 
 model Purchase {
   id           Int              @id @default(autoincrement())
   purchaseDate DateTime
-  supplierCode String
+  supplierId   Int
   totalAmount  Float
-  isPaid       Boolean
-  details      PurchaseDetail[] @relation("PurchaseToDetails")
+  isPaid       Status
+  details      PurchaseDetail[] 
+  supplier     Supplier @relation(fields : [supplierId] , references : [id])
 }
 
 model PurchaseDetail {
@@ -203,5 +217,7 @@ model PurchaseDetail {
   wholesalePrice Float
   quantity       Int
   subtotal       Float
-  purchase       Purchase @relation("PurchaseToDetails", fields: [purchaseId], references: [id])
+  purchase       Purchase @relation(fields: [purchaseId], references: [id])
+  product        Product  @relation(fields: [productId], references: [id])
+  stock          Stock    @relation(fields: [stockId], references: [id])
 }
