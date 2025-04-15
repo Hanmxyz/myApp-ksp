@@ -11,6 +11,7 @@ import vendorsRouter from "./src/router/vendorsRouter.js"
 import vendorProductsRouter from "./src/router/vendorProductsRouter.js"
 import purchasesRouter from "./src/router/purchasesRouter.js"
 import { PrismaClient } from "@prisma/client"
+import cors from "cors"
 
 const prisma = new PrismaClient();
 export { prisma }
@@ -18,6 +19,7 @@ export { prisma }
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 app.use("/api", productsRouter)
 app.use("/api", categoriesRouter)

@@ -5,7 +5,8 @@ export default class ProductsRepository {
         const stock = await prisma.stock.findMany()
         const product =  await prisma.product.findMany({
             include : {
-                category : true
+                category : true,
+                unit : true
             }
         });
 
@@ -29,7 +30,7 @@ export default class ProductsRepository {
                 image: productData.image,
                 categoryId: productData.categoryId,
                 size: productData.size,
-                unit: productData.unit,
+                unitId: productData.unitId,
                 isActive: productData.isActive,
                 updatedAt: new Date()
             }
