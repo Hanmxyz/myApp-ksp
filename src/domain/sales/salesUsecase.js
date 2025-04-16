@@ -1,9 +1,99 @@
-export default class SalesUsecase{
-    constructor(salesRepository){
+import ProductsRepository from "../../repositories/productsRepository.js"
+import StockRepository from "../../repositories/stockRepository.js"
+
+export default class SalesUsecase {
+    constructor(salesRepository) {
         this.salesRepository = salesRepository
+        this.productRepository = new ProductsRepository()
+        this.stockRepository = new StockRepository()
     }
 
     async createSale(data) {
-        return this.salesRepository.createSale(data)
+        const updateProducts = []
+        const updateStocks = []
+
+        const getStockOnProductPromise = data.product.map(async (p) => {
+            return await this.productRepository.getProductStockById(p.productId)
+        })
+        const getStockOnProduct = await Promise.all(getStockOnProductPromise)
+        const getStockOnStockPromise = data.product.map(async (p) => {
+            return await this.stockRepository.getStocksByProductId(p.productId)
+        })
+        const getStockOnStock = (await Promise.all(getStockOnStockPromise)).flat()
+        
+
+        
+        for (const product of data.product) {
+            const firstOption = getStockOnProduct.find(item => item.id === product.productId)
+            const firstResult = firstOption.stock - product.quantity
+
+            function updateStockAndDistribute(data, quantity, productId) {
+                const stockFilter = data.filter(item => item.productId === productId)
+                const sortedStock = stockFilter.sort((a, b) => a.id - b.id);
+                let remainingQuantity = Math.abs(quantity);
+                const updatedStock = [];
+
+                for (const item of sortedStock) {
+                    const stockToReduce = Math.min(remainingQuantity, item.stock);
+                    const newStock = Math.max(0, item.stock - stockToReduce);
+                    updatedStock.push({ id: item.id, productId: item.productId, stock: newStock });
+                    remainingQuantity -= stockToReduce;
+                    if (remainingQuantity <= 0) {
+                        break;
+                    }
+                }
+                return updatedStock
+
+            }
+
+            
+
+            if (firstResult > 0) {
+                updateProducts.push({ id: firstOption.id, stock: firstResult })
+            } else {
+                const secondResult = updateStockAndDistribute(getStockOnStock, firstResult, product.productId)
+                updateProducts.push({ id: firstOption.id, stock: 0})
+                updateStocks.push(secondResult)
+            }
+        }
+
+        //update stock on stock
+        const updateStockPromise = (updateStocks.flat()).map( async (p) => {
+            await this.stockRepository.updateStockAfterSale(p.id, p.stock)
+        })
+        await Promise.all(updateStockPromise)
+        //update stock on product
+        const updateStockProductPromise = updateProducts.map(async (p) => {
+            await this.productRepository.updateProductAfterSale(p.id, p.stock)
+        })
+        await Promise.all(updateStockProductPromise)
+
+        //create details
+        const details = data.product.map( p => {
+            const stockIdByProduct = updateProducts.find(item => item.id === p.productId)
+            if (stockIdByProduct.stock > 0) {
+                return {
+                    productId : p.productId,
+                    stockId : 0,
+                    purchasePrice : p.purchasePrice,
+                    salePrice : p.salePrice,
+                    quantity : p.quantity
+                }
+            } else {
+                const stockIdByStock = (updateStocks.flat()).filter(item => item.productId === p.productId)
+                const index = stockIdByStock.length - 1
+                const stockId = stockIdByStock[index]
+                return {
+                    productId : p.productId,
+                    stockId : stockId.id,
+                    purchasePrice : p.purchasePrice,
+                    salePrice : p.salePrice,
+                    quantity : p.quantity
+                }
+            }
+        })
+        console.log(details)
+ 
+        return this.salesRepository.createSale(data, details)
     }
 }

@@ -5,7 +5,8 @@ export default class ProductsRepository {
         const stock = await prisma.stock.findMany()
         const product =  await prisma.product.findMany({
             include : {
-                category : true
+                category : true,
+                unit : true
             }
         });
 
@@ -14,6 +15,17 @@ export default class ProductsRepository {
     async getProductById(id) {
         return await prisma.product.findUnique({
             where: { id: Number(id) }
+        })
+    }
+
+    async getProductStockById(id) {
+        return await prisma.product.findUnique({
+            where : { id : Number(id) },
+            select : {
+                id : true,
+                stock : true,
+                updatedAt : true
+            }
         })
     }
     async createProduct(productData) {
@@ -29,15 +41,13 @@ export default class ProductsRepository {
                 image: productData.image,
                 categoryId: productData.categoryId,
                 size: productData.size,
-                unit: productData.unit,
+                unitId: productData.unitId,
                 isActive: productData.isActive,
                 updatedAt: new Date()
             }
         });
     };
     async updateProduct(id, productData) {
-        console.log(id)
-        console.log(productData)
         return await prisma.product.update({
             where: { id: Number(id) },
             data: productData,
@@ -46,6 +56,15 @@ export default class ProductsRepository {
     async deleteProduct(id) {
         return await prisma.product.delete({
             where: { id: Number(id) },
+        });
+    }
+
+    async updateProductAfterSale(id, data) {
+        return await prisma.product.update({
+            where: { id: Number(id) },
+            data: {
+                stock : data
+            }
         });
     }
 }

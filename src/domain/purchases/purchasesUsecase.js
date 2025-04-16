@@ -15,11 +15,11 @@ export default class PurchasesUsecase{
             }
         })
         await this.stockRepository.createStock(newCreateStock)
-        const updateStock = []
-        for (const stock of newCreateStock) {
-            const getUpdateStock = await this.stockRepository.getStockByProductId(stock.productId)
-            updateStock.push(getUpdateStock)
-        }
+        const updateStockPromises = newCreateStock.map(async (stock) => {
+            return await this.stockRepository.getStockByProductId(stock.productId);
+          });
+          
+          const updateStock = await Promise.all(updateStockPromises);
 
         const newData = {
             supplierId : data.supplierId,

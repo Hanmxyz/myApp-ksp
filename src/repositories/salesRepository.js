@@ -2,7 +2,7 @@ import { prisma } from "../../server.js"
 
 export default class SalesRepository {
 
-    async createSale(data) {
+    async createSale(data, details) {
         return await prisma.sale.create({
             data : {
                 saleDate : new Date(),
@@ -11,7 +11,15 @@ export default class SalesRepository {
                 paymentType : data.paymentType,
                 isPaid : data.isPaid,
                 isCash : data.isCash,
-                details : 
+                details : {
+                    create : details.map( p => ({
+                        productId : p.productId,
+                        stockId : p.stockId,
+                        purchasePrice : parseFloat(p.purchasePrice),
+                        salePrice : parseFloat(p.salePrice),
+                        quantity : p.quantity
+                    }))
+                }
             }
         })
     }

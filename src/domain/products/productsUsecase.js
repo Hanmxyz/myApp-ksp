@@ -33,19 +33,19 @@ class ProductsUsecase {
 
         const product = updateProduct.map(p => {
             return {
-                id: p.id,
-                name: p.name,
-                purchasePrice: p.purchasePrice,
-                retailPrice: p.retailPrice,
-                wholesalePrice: p.wholesalePrice,
-                stock: p.stock,
-                minStock: p.minStock,
-                barcode: p.barcode,
-                image: p.image,
-                category: p.category.name,
-                size: p.size,
-                unit: p.unit,
-                isActive: p.isActive
+                id : p.id,
+                name : p.name,
+                purchasePrice : p.purchasePrice,
+                retailPrice : p.retailPrice,
+                wholesalePrice : p.wholesalePrice,
+                stock : p.stock,
+                minStock : p.minStock,
+                barcode : p.barcode,
+                image : p.image,
+                category : p.category.name,
+                size : p.size,
+                unit : p.unit.name,
+                isActive : p.isActive
             }
         })
         const newData = {
