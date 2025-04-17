@@ -32,6 +32,7 @@ export default class VendorProductsUsecase{
         const data = await this.vendorProductsRepository.getVendorProductByVendorId(id)
         const product = data.map( p => {
             return {
+                id : p.id,
                 name : p.name,
                 kategory : p.category.name,
                 sellPrice : p.sellPrice,
@@ -41,7 +42,7 @@ export default class VendorProductsUsecase{
 
         const newData = {
             title : "daftar barang",
-            header : ["Nama barang", "kategori", "harga jual", "persen untung"],
+            header : ["id","Nama barang", "kategori", "harga jual", "persen untung"],
             data : product
         }
 
