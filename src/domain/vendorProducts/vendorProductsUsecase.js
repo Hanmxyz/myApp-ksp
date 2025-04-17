@@ -28,6 +28,26 @@ export default class VendorProductsUsecase{
         return await this.vendorProductsRepository.getVendorProductById(id)
     }
 
+    async getVendorProductByVendorId(id) {
+        const data = await this.vendorProductsRepository.getVendorProductByVendorId(id)
+        const product = data.map( p => {
+            return {
+                name : p.name,
+                kategory : p.category.name,
+                sellPrice : p.sellPrice,
+                profitPercent : p.profitPercent
+            }
+        })
+
+        const newData = {
+            title : "daftar barang",
+            header : ["Nama barang", "kategori", "harga jual", "persen untung"],
+            data : product
+        }
+
+        return newData
+    }
+
     async createVendorProduct(data) {
         return await this.vendorProductsRepository.createVendorProduct(data)
     }

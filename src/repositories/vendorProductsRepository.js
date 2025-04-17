@@ -16,6 +16,15 @@ export default class VendorProductsRepository{
         })
     }
 
+    async getVendorProductByVendorId(id) {
+        return await prisma.vendorProduct.findMany({
+            where : { vendorId : Number(id)},
+            include : {
+                category : true
+            }
+        })
+    }
+
     async createVendorProduct(data) {
         return await prisma.vendorProduct.create({
             data : {

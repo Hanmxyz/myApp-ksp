@@ -15,6 +15,7 @@ router.get("/vendor_product/:id", (req,res) => { vendorProductsHandler.getVendor
 router.post("/vendor_product", (req,res) => { vendorProductsHandler.createVendorProduct(req,res)})
 router.put("/vendor_product/:id", (req,res) => { vendorProductsHandler.updateVendorProduct(req,res)})
 router.delete("/vendor_product/:id", (req,res) => { vendorProductsHandler.deleteVendorProduct(req,res)})
+router.get("/vendor_product/vendor/:id", (req,res) => { vendorProductsHandler.getVendorProductByVendorId(req,res)})
 
 
 

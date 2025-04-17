@@ -9,8 +9,8 @@ export default class SalesRepository {
                 nip : data.nip,
                 totalAmount : parseFloat(data.totalAmount),
                 paymentType : data.paymentType,
-                isPaid : data.isPaid,
-                isCash : data.isCash,
+                paymentStatus : data.paymentStatus,
+                paymentMetode : data.paymentMetode,
                 details : {
                     create : details.map( p => ({
                         productId : p.productId,

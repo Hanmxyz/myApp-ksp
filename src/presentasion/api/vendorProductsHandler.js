@@ -52,4 +52,14 @@ export default class VendorProductsHandler {
             res.status(500).json({ message : error.message })
         }
     }
+
+    async getVendorProductByVendorId(req,res) {
+        try {
+            const id = req.params.id
+            const data = await this.vendorProductsUsecase.getVendorProductByVendorId(id)
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message})
+        }
+    }
 }
