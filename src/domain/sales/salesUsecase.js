@@ -8,6 +8,17 @@ export default class SalesUsecase {
         this.stockRepository = new StockRepository()
     }
 
+    async getAllSales() {
+        const data = await this.salesRepository.getAllSales()
+
+        const newData = {
+            title : "penjualan",
+            header : ["kode penjualan", "tanggal ", "nip member", "total", "tipe pembayaran", "status pembayaran", "metode pembayaran"],
+            data : data
+        }
+        return newData
+    }
+
     async createSale(data) {
         const updateProducts = []
         const updateStocks = []
@@ -92,7 +103,7 @@ export default class SalesUsecase {
                 }
             }
         })
-        console.log(details)
+        // console.log(details)
  
         return this.salesRepository.createSale(data, details)
     }

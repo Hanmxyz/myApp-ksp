@@ -2,6 +2,10 @@ import { prisma } from "../../server.js"
 
 export default class SalesRepository {
 
+    async getAllSales() {
+        return await prisma.sale.findMany()
+    }
+
     async createSale(data, details) {
         return await prisma.sale.create({
             data : {

@@ -34,7 +34,7 @@ export default class VendorProductsUsecase{
             return {
                 id : p.id,
                 name : p.name,
-                kategory : p.category.name,
+                category : p.category.name,
                 sellPrice : p.sellPrice,
                 profitPercent : p.profitPercent
             }

@@ -1,13 +1,22 @@
 import { prisma } from "../../server.js"
 
 export default class PurchasesRepository{
+
+    async getAllPurchases() {
+        return await prisma.purchase.findMany({
+            include : {
+                supplier : true
+            }
+        })
+    }
+
     async createPurchase(data) {
         const purchase = await prisma.purchase.create({
             data : {
                 purchaseDate : new Date(),
                 supplierId : data.supplierId,
                 totalAmount : parseFloat(data.totalAmount),
-                isPaid : data.isPaid,
+                isPaid : data.status,
                 details : {
                     create : data.product.map( p => ({
                         productId : p.productId,

@@ -10,6 +10,8 @@ const purchasesRepository = new PurchasesRepository()
 const purchasesUsecase = new PurchasesUsecase(purchasesRepository)
 const purchasesHandler = new PurchasesHandler(purchasesUsecase)
 
+
+router.get("/purchase", (req,res) => {purchasesHandler.getAllPurchases(req,res)})
 router.post("/purchase", (req,res) => {purchasesHandler.createPurchase(req,res)})
 
 export default router

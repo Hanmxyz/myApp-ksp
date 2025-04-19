@@ -3,6 +3,15 @@ export default class SalesHandler{
         this.salesUsecase = salesUsecase
     }
 
+    async getAllSales(req,res) {
+        try {
+            const data = await this.salesUsecase.getAllSales()
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async createSale(req, res) {
         try {
             const data = req.body

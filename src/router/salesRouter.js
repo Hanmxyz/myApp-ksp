@@ -12,7 +12,7 @@ const salesUsecase = new SalesUsecase(salesRepository)
 const salesHandler = new SalesHandler(salesUsecase)
 
 
+router.get("/sale", (req,res) => { salesHandler.getAllSales(req,res)})
 router.post("/sale", (req,res) => {salesHandler.createSale(req,res)})
-
 
 export default router

@@ -86,17 +86,21 @@ model ProductUnit {
 }
 
 model Member {
-  nip           String    @id @db.VarChar(10)
-  name          String?   @db.VarChar(50)
-  accountNumber String    @unique @db.VarChar(20)
-  bank          String    @db.VarChar(20)
-  phoneNumber   String    @db.VarChar(15)
-  address       String    @db.Text
-  creditLimit   Int
-  isActive      Status    @default(YES)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
-  sales         Sale[]
+  nip               String    @id @db.VarChar(10)
+  name              String?   @db.VarChar(50)
+  accountNumber     String    @unique @db.VarChar(20)
+  bank              String    @db.VarChar(20)
+  phoneNumber       String    @db.VarChar(15)
+  address           String    @db.Text
+  creditLimit       Int
+  isActive          Status    @default(YES)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime? @updatedAt
+  
+  sales             Sale[]
+  vendorSale        VendorSale[]
+  creditSales       PaymentCreditSale[]
+  vendorCreditSales PaymentCreditVendorSale[]
 }
 
 model Management {
@@ -237,36 +241,50 @@ model PurchaseDetail {
 model PaymentCreditSale {
   id                Int     @id @default(autoincrement())
   saleId            Int
-  nip               Int
+  nip               String  @db.VarChar(10)
   paymentTotal      Int
   paymentDate       DateTime
   status            TransactionStatus
+
+  sale              Sale    @realtion(fields: [saleId], references : [id])
+  nip               Member  @relation(fields: [nip],  references : nip)
 }
 
 model VendorSale {
   id                Int     @id @default(autoincrement())
-  vendorProductId   Int     
-  quantity          Int
-  salePrice         Int
-  subtotal          Int
-  profitKsp         Int
+  nip               String  @db.VarChar(10)     
+  totalAmount       Float
+  profitKsp         Float
   transactionDate   Int
   paymentMetode     PaymentMetode
   paymentStatus     PaymentStatus
   details           PaymentCreditVendorSale[]
-  vendorProduct     VendorProduct @relation(fields: [vendorProductId], references : [id])
+  
+  nip               Member  @relation(fields: [nip],  references : nip)
 }
 
+model VendorSaleDetail {
+  id                Int     @id  @default(autoincrement())
+  vendorSaleId      Int
+  vendorProductId   Int
+  salePrice         Int
+  quantity          Int
+  subtotal          Float
+
+  vendorSale        VendorSale @relation(fields: [vendorSaleId], references : [id])
+  vendorProduct     VendorProduct @relation(fields: [vendorProductId], references : [id])
+}
 
 model PaymentCreditVendorSale {
   id                Int      @id @default(autoincrement())
   vendorSaleId      Int
-  nip               Int
+  nip               String  @db.VarChar(10)     
   paymentTotal      Int
   paymentDate       DateTime
   status            TransactionStatus
 
   vendorSale        VendorSale  @relation(fields: [vendorSaleId], references : [id])
+  nip               Member  @relation(fields: [nip],  references : nip)
 }
 
 model PaymentVendorSale {

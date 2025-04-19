@@ -6,6 +6,24 @@ export default class PurchasesUsecase{
         this.stockRepository = new StockRepository()
     }
 
+    async getAllPurchases() {
+        const data = await this.purchasesRepository.getAllPurchases()
+
+        const newData = { 
+            title : "pembelian",
+            header : ["kode pembelian",  "tanggal pembelian", "supplier", "status"],
+            data : data.map(p => ({
+                id : p.id,
+                purchaseDate : p.purchaseDate,
+                supplier : p.supplier.name,
+                totalAmount : p.totalAmount,
+                status : p.isPaid
+            }))
+        }
+
+        return newData
+    }
+
     async createPurchase(data) {
         const newCreateStock = data.product.map( p => {
             return {
@@ -24,7 +42,7 @@ export default class PurchasesUsecase{
         const newData = {
             supplierId : data.supplierId,
             totalAmount : data.totalAmount,
-            isPaid : data.isPaid,
+            status : data.status,
             product : data.product.map(p => {
                 const match = updateStock.find(item => item.productId === p.productId)?.id
                 return {
