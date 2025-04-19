@@ -11,6 +11,7 @@ const purchasesUsecase = new PurchasesUsecase(purchasesRepository)
 const purchasesHandler = new PurchasesHandler(purchasesUsecase)
 
 
+router.get("/purchase/detail/:id", (req,res) => {purchasesHandler.getDetailPurchaseByPurchaseId(req,res)})
 router.get("/purchase", (req,res) => {purchasesHandler.getAllPurchases(req,res)})
 router.post("/purchase", (req,res) => {purchasesHandler.createPurchase(req,res)})
 

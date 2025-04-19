@@ -24,6 +24,24 @@ export default class PurchasesUsecase{
         return newData
     }
 
+    async getDetailPurchaseByPurchaseId(id) {
+        const data = await this.purchasesRepository.getDetailPurchaseByPurchaseId(id)
+
+        const newData = data.map( p => {
+            return  {
+                id : p.id,
+                product : p.product.name,
+                purchasePrice : p.purchasePrice,
+                retailPrice : p.retailPrice,
+                wholesalePrice : p.wholesalePrice,
+                quantity : p.quantity,
+                subtotal : p.subtotal
+            }
+        })
+
+        return newData
+    }
+
     async createPurchase(data) {
         const newCreateStock = data.product.map( p => {
             return {

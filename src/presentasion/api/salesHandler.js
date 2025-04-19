@@ -12,6 +12,16 @@ export default class SalesHandler{
         }
     }
 
+    async getDetailSaleBySaleId(req,res) {
+        try {
+            const id = req.params.id
+            const data = await this.salesUsecase.getDetailSaleBySaleId(id)
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async createSale(req, res) {
         try {
             const data = req.body

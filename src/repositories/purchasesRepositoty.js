@@ -10,6 +10,16 @@ export default class PurchasesRepository{
         })
     }
 
+    async getDetailPurchaseByPurchaseId(id) {
+        return await prisma.purchaseDetail.findMany({
+            where : { purchaseId : Number(id)},
+            include : {
+                product : true,
+                stock : true
+            }
+        })
+    }
+
     async createPurchase(data) {
         const purchase = await prisma.purchase.create({
             data : {

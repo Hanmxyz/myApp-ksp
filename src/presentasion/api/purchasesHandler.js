@@ -12,6 +12,16 @@ export default class PurchasesHandler {
         }
     }
 
+    async getDetailPurchaseByPurchaseId(req,res) {
+        try {
+            const id = req.params.id
+            const data = await this.purchasesUsecase.getDetailPurchaseByPurchaseId(id)
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async createPurchase(req, res) {
         try {
             const data = req.body

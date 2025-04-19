@@ -6,6 +6,15 @@ export default class SalesRepository {
         return await prisma.sale.findMany()
     }
 
+    async getDetailSaleBySaleId(id) {
+        return await prisma.saleDetail.findMany({
+            where : { saleId : Number(id)},
+            include : {
+                product : true
+            }
+        })
+    }
+
     async createSale(data, details) {
         return await prisma.sale.create({
             data : {

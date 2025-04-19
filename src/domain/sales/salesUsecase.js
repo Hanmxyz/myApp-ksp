@@ -19,6 +19,24 @@ export default class SalesUsecase {
         return newData
     }
 
+    async getDetailSaleBySaleId(id) {
+        const data = await this.salesRepository.getDetailSaleBySaleId(id)
+
+        const newData = data.map( p => {
+            return {
+                id : p.id,
+                product : p.product.name,
+                stock : (p.stockId === 0 ? "stock default" : "stock baru"),
+                purchasePrice : p.purchasePrice,
+                salePrice : p.salePrice,
+                quantity : p.quantity,
+                subTotal : (p.quantity * p.salePrice)
+            }
+        })
+
+        return newData
+    }
+
     async createSale(data) {
         const updateProducts = []
         const updateStocks = []
