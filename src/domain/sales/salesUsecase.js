@@ -56,30 +56,28 @@ export default class SalesUsecase {
             const firstOption = getStockOnProduct.find(item => item.id === product.productId)
             const firstResult = firstOption.stock - product.quantity
 
-            function updateStockAndDistribute(data, quantity, productId) {
-                const stockFilter = data.filter(item => item.productId === productId)
-                const sortedStock = stockFilter.sort((a, b) => a.id - b.id);
-                let remainingQuantity = Math.abs(quantity);
-                const updatedStock = [];
-
-                for (const item of sortedStock) {
-                    const stockToReduce = Math.min(remainingQuantity, item.stock);
-                    const newStock = Math.max(0, item.stock - stockToReduce);
-                    updatedStock.push({ id: item.id, productId: item.productId, stock: newStock });
-                    remainingQuantity -= stockToReduce;
-                    if (remainingQuantity <= 0) {
-                        break;
-                    }
-                }
-                return updatedStock
-
-            }
-
-            
 
             if (firstResult > 0) {
                 updateProducts.push({ id: firstOption.id, stock: firstResult })
             } else {
+                function updateStockAndDistribute(data, quantity, productId) {
+                    const stockFilter = data.filter(item => item.productId === productId)
+                    const sortedStock = stockFilter.sort((a, b) => a.id - b.id);
+                    let remainingQuantity = Math.abs(quantity);
+                    const updatedStock = [];
+    
+                    for (const item of sortedStock) {
+                        const stockToReduce = Math.min(remainingQuantity, item.stock);
+                        const newStock = Math.max(0, item.stock - stockToReduce);
+                        updatedStock.push({ id: item.id, productId: item.productId, stock: newStock });
+                        remainingQuantity -= stockToReduce;
+                        if (remainingQuantity <= 0) {
+                            break;
+                        }
+                    }
+                    return updatedStock
+    
+                }
                 const secondResult = updateStockAndDistribute(getStockOnStock, firstResult, product.productId)
                 updateProducts.push({ id: firstOption.id, stock: 0})
                 updateStocks.push(secondResult)
@@ -121,7 +119,7 @@ export default class SalesUsecase {
                 }
             }
         })
-        // console.log(details)
+        console.log(details)
  
         return this.salesRepository.createSale(data, details)
     }
