@@ -172,7 +172,7 @@ model VendorProduct {
   entryDate     DateTime  @default(now())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
-  vendorSales   VendorSale[]
+  vendorSales   VendorSaleDetail[]
 
   vendor   Vendor   @relation(fields: [vendorId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -198,6 +198,7 @@ model Sale {
   paymentStatus  PaymentStatus
   paymentMetode  PaymentMetode
   details        SaleDetail[]
+  credit         PaymentCreditSale[]
   member         Member       @relation(fields: [nip], references: [nip])
 }
 
@@ -246,8 +247,8 @@ model PaymentCreditSale {
   paymentDate       DateTime
   status            TransactionStatus
 
-  sale              Sale    @realtion(fields: [saleId], references : [id])
-  nip               Member  @relation(fields: [nip],  references : nip)
+  sale              Sale    @relation(fields: [saleId], references : [id])
+  member               Member  @relation(fields: [nip],  references : nip)
 }
 
 model VendorSale {
@@ -258,9 +259,12 @@ model VendorSale {
   transactionDate   Int
   paymentMetode     PaymentMetode
   paymentStatus     PaymentStatus
-  details           PaymentCreditVendorSale[]
+
+  details           VendorSaleDetail[]
+  credit            PaymentCreditVendorSale[]
+
   
-  nip               Member  @relation(fields: [nip],  references : nip)
+  member            Member  @relation(fields: [nip],  references : nip)
 }
 
 model VendorSaleDetail {
@@ -284,7 +288,7 @@ model PaymentCreditVendorSale {
   status            TransactionStatus
 
   vendorSale        VendorSale  @relation(fields: [vendorSaleId], references : [id])
-  nip               Member  @relation(fields: [nip],  references : nip)
+  member            Member  @relation(fields: [nip],  references : nip)
 }
 
 model PaymentVendorSale {
