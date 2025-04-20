@@ -243,12 +243,11 @@ model PaymentCreditSale {
   id                Int     @id @default(autoincrement())
   saleId            Int
   nip               String  @db.VarChar(10)
-  paymentTotal      Int
-  paymentDate       DateTime
+  paymentTotal      Float
+  paymentDate       DateTime?
   status            TransactionStatus
-
   sale              Sale    @relation(fields: [saleId], references : [id])
-  member               Member  @relation(fields: [nip],  references : nip)
+  member            Member  @relation(fields: [nip],  references : nip)
 }
 
 model VendorSale {
@@ -256,7 +255,7 @@ model VendorSale {
   nip               String  @db.VarChar(10)     
   totalAmount       Float
   profitKsp         Float
-  transactionDate   Int
+  transactionDate   DateTime @default(now())
   paymentMetode     PaymentMetode
   paymentStatus     PaymentStatus
 

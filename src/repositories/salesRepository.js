@@ -16,6 +16,9 @@ export default class SalesRepository {
     }
 
     async createSale(data, details) {
+
+        const isCredit = data.paymentMetode === "bon";
+
         return await prisma.sale.create({
             data : {
                 saleDate : new Date(),
@@ -25,14 +28,25 @@ export default class SalesRepository {
                 paymentStatus : data.paymentStatus,
                 paymentMetode : data.paymentMetode,
                 details : {
-                    create : details.map( p => ({
+                    create : product.map( p => ({
                         productId : p.productId,
                         stockId : p.stockId,
                         purchasePrice : parseFloat(p.purchasePrice),
                         salePrice : parseFloat(p.salePrice),
                         quantity : p.quantity
                     }))
-                }
+                },
+                ...( isCredit && {
+                    credit : {
+                        create : [
+                            {
+                                nip : data.nip,
+                                paymentTotal : parseFloat(data.totalAmount),
+                                paymentDate : new Date(),
+                                status : "cicilan"
+                            }
+                        ]
+                }})
             }
         })
     }
