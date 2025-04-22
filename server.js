@@ -13,6 +13,7 @@ import purchasesRouter from "./src/router/purchasesRouter.js"
 import salesRouter from "./src/router/salesRouter.js"
 import vendorSaleRouter from "./src/router/vendorSalesRouter.js"
 import paymentCreditVendorSaleRouter from "./src/router/paymentCreditVendorSaleRouter.js"
+import paymentCreditSaleRouter from "./src/router/paymentCreditSaleRouter.js"
 import { PrismaClient } from "@prisma/client"
 import cors from "cors"
 
@@ -39,6 +40,7 @@ app.use("/api", purchasesRouter)
 app.use("/api", salesRouter)
 app.use("/api", vendorSaleRouter)
 app.use("/api", paymentCreditVendorSaleRouter)
+app.use("/api", paymentCreditSaleRouter)
 app.listen(3000, () => {
     console.log("http://localhost:3000/")
 })
