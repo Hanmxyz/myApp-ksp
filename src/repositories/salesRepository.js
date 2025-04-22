@@ -28,7 +28,7 @@ export default class SalesRepository {
                 paymentStatus : data.paymentStatus,
                 paymentMetode : data.paymentMetode,
                 details : {
-                    create : product.map( p => ({
+                    create : details.map( p => ({
                         productId : p.productId,
                         stockId : p.stockId,
                         purchasePrice : parseFloat(p.purchasePrice),
