@@ -3,6 +3,17 @@ import { prisma } from "../../server.js"
 
 export default class VendorSalesRepository{
 
+    async getAllVendorSales() {
+        return await prisma.vendorSale.findMany({
+            include : {
+                details : true
+            }
+        })
+        
+
+      
+    }
+
     async createVendorSale(data) {
         const isCredit = data.paymentMetode === "bon"
         return await prisma.vendorSale.create({

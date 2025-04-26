@@ -10,7 +10,7 @@ const vendorSalesRepository = new VendorSalesRepository()
 const vendorSalesUsecase = new VendorSalesUsecase(vendorSalesRepository)
 const vendorSalesHandler =  new VendorSalesHandler(vendorSalesUsecase)
 
-
+router.get("/vendorsale", (req,res) => { vendorSalesHandler.getAllVendorSales(req,res)})
 router.post("/vendorsale", (req,res) => { vendorSalesHandler.createVendorSale(req,res)})
 
 export default router

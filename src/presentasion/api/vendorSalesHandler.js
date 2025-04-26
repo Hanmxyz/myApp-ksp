@@ -3,6 +3,15 @@ export default class VendorSalesHandler{
         this.vendorSalesUsecase = vendorSalesUsecase
     }
 
+
+    async getAllVendorSales(req,res) {
+        try {
+            const data = await this.vendorSalesUsecase.getAllVendorSales()
+            res.json(data)
+        } catch (error) {
+            res.satus(500).json({ message : error.message })
+        }
+    }
     async createVendorSale(req,res) {
        try {
         const data = req.body

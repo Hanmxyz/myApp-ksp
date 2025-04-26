@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `paymentvendorsale` MODIFY `paymentDate` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE `vendorsaledetail` ADD COLUMN `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

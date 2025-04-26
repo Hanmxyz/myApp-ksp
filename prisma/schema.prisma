@@ -273,6 +273,7 @@ model VendorSaleDetail {
   salePrice         Int
   quantity          Int
   subtotal          Float
+  createdAt         DateTime  @default(now())
 
   vendorSale        VendorSale @relation(fields: [vendorSaleId], references : [id])
   vendorProduct     VendorProduct @relation(fields: [vendorProductId], references : [id])
@@ -294,6 +295,6 @@ model PaymentVendorSale {
   id                Int      @id  @default(autoincrement())
   vendorId          Int
   paymentTotal      Int
-  paymentDate       DateTime?
+  paymentDate       DateTime? @default(now())
   status            PaymentStatus
 }

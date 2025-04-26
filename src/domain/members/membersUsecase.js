@@ -20,7 +20,7 @@ export default class MembersUsecase{
         const newData = {
             title : "member",
             header : ["nip", "name", "accountNumber", "bank", "phoneNumber", "address", "creditLimit", "isActive"],
-            data : member
+            data : member.filter(item => item.nip !== "0000000000")
         }
 
         return newData
