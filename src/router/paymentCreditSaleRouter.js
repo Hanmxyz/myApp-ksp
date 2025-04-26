@@ -11,9 +11,11 @@ const paymentCreditSalesRepository = new PaymentCreditSalesRepository()
 const paymentCreditSalesUsecase = new PaymentCreditSalesUsecase(paymentCreditSalesRepository)
 const paymentCreditSalesHandler = new PaymentCreditSalesHandler(paymentCreditSalesUsecase)
 
-router.get("/creditsale", (req,res) => { paymentCreditSalesHandler.getAllCreditMember(req,res)})
-router.get("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.getCreditMemberByNip(req,res)})
-router.put("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.updateCreditMember(req,res)})
+router.get("/creditsale", (req,res) => { paymentCreditSalesHandler.getAllCreditMemberPerMonth(req,res)})
+router.put("/creditsale", (req,res) => { paymentCreditSalesHandler.updateCreditMemberByNipPerMonth(req,res)})
+
+// router.get("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.getCreditMemberByNip(req,res)})
+// router.put("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.updateCreditMember(req,res)})
 
 
 

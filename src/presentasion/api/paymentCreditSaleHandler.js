@@ -3,9 +3,10 @@ export default class PaymentCreditSalesHandler{
         this.paymentCreditSalesUsecase = paymentCreditSalesUsecase
     }
 
-    async getAllCreditMember(req,res) {
+    async getAllCreditMemberPerMonth(req,res) {
         try {
-            const data = await this.paymentCreditSalesUsecase.getAllCreditMember()
+            const queryString = req.query
+            const data = await this.paymentCreditSalesUsecase.getAllCreditMemberPerMonth(queryString)
             res.json(data)
         } catch (error) {
             res.status(500).json({ message : error.message})
@@ -28,6 +29,17 @@ export default class PaymentCreditSalesHandler{
             const nip = req.params.nip
             const response = await this.paymentCreditSalesUsecase.updateCreditMember(data, nip)
             res.json({ message : true, data : response})
+        } catch (error) {
+            res.status(500).json({ message : error.message})
+        }
+    }
+
+    async updateCreditMemberByNipPerMonth(req,res) {
+        try {
+            const data = req.body
+            const queryString = req.query
+            const response = await this.paymentCreditSalesUsecase.updateCreditMemberByNipPerMonth(data, queryString)
+            res.json({ message : true , data : response})
         } catch (error) {
             res.status(500).json({ message : error.message})
         }
