@@ -18,7 +18,7 @@ export default class VendorSalesUsecase {
         const date = new Date()
         const isoString = date.toISOString()
         const dateNow = isoString.slice(0,10)
-        console.log(dateNow)
+        // console.log(dateNow)
         
         const newData = {
             nip: data.nip,

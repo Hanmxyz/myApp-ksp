@@ -11,9 +11,12 @@ const paymentCreditVendorSaleRepository = new PaymentCreditVendorSaleRepository(
 const paymentCreditVendorSalesUsecase = new PaymentCreditVendorSalesUsecase(paymentCreditVendorSaleRepository)
 const paymentCreditVendorSalesHandler = new PaymentCreditVendorSalesHandler(paymentCreditVendorSalesUsecase)
 
-router.get("/creditvendorsale", (req,res) => { paymentCreditVendorSalesHandler.getAllCreditMember(req,res)})
-router.get("/creditvendorsale/:nip", (req,res) => { paymentCreditVendorSalesHandler.getCreditMemberByNip(req,res)})
-router.put("/creditvendorsale/:nip", (req,res) => { paymentCreditVendorSalesHandler.updateCreditMember(req,res)})
+router.get("/creditvendorsale", (req,res) => { paymentCreditVendorSalesHandler.getAllCreditMemberPerMonth(req,res)})
+router.get("/creditvendorsale/:nip", (req,res) => { paymentCreditVendorSalesHandler.getDetailTransactionCreditMemberPerMonth(req,res)})
+router.put("/creditvendorsale", (req,res) => { paymentCreditVendorSalesHandler.updateCreditMemberByNipPerMonth(req,res)})
+
+// router.get("/creditvendorsale/:nip", (req,res) => { paymentCreditVendorSalesHandler.getCreditMemberByNip(req,res)})
+// router.put("/creditvendorsale/:nip", (req,res) => { paymentCreditVendorSalesHandler.updateCreditMember(req,res)})
 
 
 

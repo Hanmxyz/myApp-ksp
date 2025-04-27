@@ -12,6 +12,7 @@ const paymentCreditSalesUsecase = new PaymentCreditSalesUsecase(paymentCreditSal
 const paymentCreditSalesHandler = new PaymentCreditSalesHandler(paymentCreditSalesUsecase)
 
 router.get("/creditsale", (req,res) => { paymentCreditSalesHandler.getAllCreditMemberPerMonth(req,res)})
+router.get("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.getDetailTransactionCreditMemberPerMonth(req,res)})
 router.put("/creditsale", (req,res) => { paymentCreditSalesHandler.updateCreditMemberByNipPerMonth(req,res)})
 
 // router.get("/creditsale/:nip", (req,res) => { paymentCreditSalesHandler.getCreditMemberByNip(req,res)})

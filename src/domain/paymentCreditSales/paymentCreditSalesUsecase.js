@@ -57,6 +57,35 @@ export default class PaymentCreditSalesUsecase{
         return newData
     }
 
+    async getDetailTransactionCreditMemberPerMonth(nip, queryString) {
+        function combineSalesAndDetails(matchSale, details) {
+            return matchSale.map((sale, index) => {
+                const saleDetails = details[index].map(detail => ({
+                    id: detail.id,
+                    name: detail.product.name, 
+                    salePrice: detail.salePrice,
+                    quantity: detail.quantity,
+                    subtotal: detail.subtotal,
+                }));
+        
+                return {
+                    ...sale,
+                    details: saleDetails,
+                };
+            });
+        }
+        const { matchSale, details} = await this.paymentCreditSaleRepository.getDetailTransactionCreditMemberPerMonth(nip, queryString)
+        const vendorSale = matchSale.map( item => {
+            return {
+                id : item.id,
+                saleId : item.saleId,
+                paymentDate : item.paymentDate,
+                paymentTotal : item.paymentTotal
+            }
+        })
+        return combineSalesAndDetails(vendorSale,details)
+    }
+
     async updateCreditMember(total,nip) {
         const nominal = total.nominal
         const data = await this.paymentCreditSaleRepository.getCreditMemberByNip(nip)

@@ -210,6 +210,9 @@ model SaleDetail {
   purchasePrice Float
   salePrice     Float
   quantity      Int
+  subtotal      Float
+  createdAt     DateTime @default(now())
+
   sale          Sale    @relation(fields: [saleId], references: [id])
   product       Product @relation(fields: [productId], references: [id])
 }
@@ -246,6 +249,7 @@ model PaymentCreditSale {
   paymentTotal      Float
   paymentDate       DateTime?
   status            TransactionStatus
+
   sale              Sale    @relation(fields: [saleId], references : [id])
   member            Member  @relation(fields: [nip],  references : nip)
 }

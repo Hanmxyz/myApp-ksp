@@ -1,14 +1,17 @@
 import { prisma } from "../../server.js"
 
-export default class PaymentCreditSalesRepository{
+export default class PaymentCreditSalesRepository {
+
+
+    async getAllCreditMember() {
+        return await prisma.paymentCreditSale.findMany({
+            include: {
+                member: true
+            }
+        })
+    }
 
     async getAllCreditMemberPerMonth(queryString) {
-        // return await prisma.paymentCreditSale.findMany({
-        //     include : {
-        //         member : true
-        //     }
-        // })
-
         const year = queryString.year
         const month = queryString.month
         const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
@@ -17,7 +20,7 @@ export default class PaymentCreditSalesRepository{
         console.log(endDate)
         return await prisma.paymentCreditSale.findMany({
             where: {
-                paymentDate : {
+                paymentDate: {
                     gte: startDate,
                     lte: endDate,
                 },
@@ -26,27 +29,65 @@ export default class PaymentCreditSalesRepository{
                 member: true,
             },
         });
-    
-    
+
     }
 
     async getCreditMemberByNip(nip) {
         return await prisma.paymentCreditSale.findMany({
-            where : { nip : String(nip)},
-            include : { member : true}
+            where: { nip: String(nip) },
+            include: { member: true }
         })
     }
 
+    async getDetailTransactionCreditMemberPerMonth(nip, queryString) {
+        try {
+            const year = queryString.year
+            const month = queryString.month
+            const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
+            const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+
+            const matchSale = await prisma.paymentCreditSale.findMany({
+                where: {
+                    nip : String(nip),
+                    paymentDate: {
+                        gte: startDate,
+                        lte: endDate,
+                    },
+                }
+            });
+
+            const updatePromises = matchSale.map(async (item) => {
+                return prisma.saleDetail.findMany({
+                    where: {
+                        saleId: Number(item.saleId),
+                        createdAt: {
+                            gte: startDate,
+                            lte: endDate,
+                        },
+                    },
+                    include : {
+                        product : true
+                    }
+                })
+            })
+            console.log(matchSale)
+            const details = await Promise.all(updatePromises)
+            console.log(details)
+            return { matchSale , details}
+        } catch (error) {
+            throw error
+        }
+    }
 
     async updateCreditMember(data) {
         await Promise.all(
-            data.map( p => (
+            data.map(p => (
                 prisma.paymentCreditSale.update({
-                    where : { id : Number(p.id)},
-                    data : {
-                        paymentTotal : p.paymentTotal,
-                        paymentDate : new Date(),
-                        status : p.status
+                    where: { id: Number(p.id) },
+                    data: {
+                        paymentTotal: p.paymentTotal,
+                        paymentDate: new Date(),
+                        status: p.status
                     }
                 })
             ))
@@ -60,16 +101,16 @@ export default class PaymentCreditSalesRepository{
         const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
 
         try {
-            const updatePromises = data.map( async (item) => {
+            const updatePromises = data.map(async (item) => {
                 return prisma.paymentCreditSale.updateMany({
-                    where : {
-                        nip : String(item.nip), 
-                        paymentDate : {
+                    where: {
+                        nip: String(item.nip),
+                        paymentDate: {
                             gte: startDate,
                             lte: endDate,
                         },
-                    }, data : {
-                        status : item.status
+                    }, data: {
+                        status: item.status
                     }
                 })
             })

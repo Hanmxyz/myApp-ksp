@@ -33,7 +33,8 @@ export default class SalesRepository {
                         stockId : p.stockId,
                         purchasePrice : parseFloat(p.purchasePrice),
                         salePrice : parseFloat(p.salePrice),
-                        quantity : p.quantity
+                        quantity : p.quantity,
+                        subtotal : parseFloat(p.quantity * p.salePrice)
                     }))
                 },
                 ...( isCredit && {

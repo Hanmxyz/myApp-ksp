@@ -23,6 +23,18 @@ export default class PaymentCreditSalesHandler{
         }
     }
 
+    async getDetailTransactionCreditMemberPerMonth(req,res) {
+        try {
+            const nip = req.params.nip
+            const queryString = req.query
+            const response = await this.paymentCreditSalesUsecase.getDetailTransactionCreditMemberPerMonth(nip, queryString)
+            res.json(response)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
+
     async updateCreditMember(req,res) {
         try {
             const data = req.body
