@@ -11,6 +11,7 @@ const vendorProductsUsecase = new VendorProductsUsecase(vendorProductsRepository
 const vendorProductsHandler = new VendorProductsHandler(vendorProductsUsecase)
 
 router.get("/vendor_product", (req,res) => { vendorProductsHandler.getAllVendorProducts(req,res)})
+router.get("/vendor_product_search", (req,res) => { vendorProductsHandler.getAllVendorProductsForTx(req,res)})
 router.get("/vendor_product/:id", (req,res) => { vendorProductsHandler.getVendorProductById(req,res)})
 router.post("/vendor_product", (req,res) => { vendorProductsHandler.createVendorProduct(req,res)})
 router.put("/vendor_product/:id", (req,res) => { vendorProductsHandler.updateVendorProduct(req,res)})

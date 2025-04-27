@@ -12,6 +12,15 @@ export default class VendorProductsHandler {
         }
     }
 
+    async getAllVendorProductsForTx(req,res) {
+        try {
+            const data = await this.vendorProductsUsecase.getAllVendorProductsForTx()
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async getVendorProductById(req,res) {
         try {
             const id = req.params.id

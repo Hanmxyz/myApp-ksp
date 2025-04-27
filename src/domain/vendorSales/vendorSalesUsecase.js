@@ -30,15 +30,18 @@ export default class VendorSalesUsecase {
                 vendorProductId : p.vendorProductId,
                 salePrice : p.salePrice,
                 quantity : p.quantity,
+                profitKsp: p.profitKsp,
                 subtotal : parseFloat(p.salePrice * p.quantity)
             })) 
         }
 
        try {
         for (const item of newData.product) {
+            // console.log(item)
             const checkVendor = await this.vendorProductsRepository.getVendorProductById(item.vendorProductId)
+            // console.log(checkVendor)
             const checkPaymentVendor = await this.paymentVendorSaleRepository.getVendorPayment(checkVendor.vendorId)
-            console.log(checkPaymentVendor)
+            // console.log(checkPaymentVendor)
             if (!checkPaymentVendor) {
                 const data = {
                     vendorId: checkVendor.vendorId,

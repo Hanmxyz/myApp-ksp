@@ -12,9 +12,9 @@ export default class PaymentCreditVendorSaleRepository {
 
     async getAllCreditMemberPerMonth(queryString) {
         const year = queryString.year
-        const month = queryString.month
-        const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
-        const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+        const month = parseInt(queryString.month) - 1
+        const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+        const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
         return await prisma.paymentCreditVendorSale.findMany({
             where: {
                 paymentDate: {
@@ -39,9 +39,9 @@ export default class PaymentCreditVendorSaleRepository {
     async getDetailTransactionCreditMemberPerMonth(nip, queryString) {
         try {
             const year = queryString.year
-            const month = queryString.month
-            const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const month = parseInt(queryString.month) - 1
+            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
 
             const matchSale = await prisma.paymentCreditVendorSale.findMany({
                 where: {
@@ -67,9 +67,6 @@ export default class PaymentCreditVendorSaleRepository {
                     }
                 })
             })
-            // console.log(matchSale)
-            const details = await Promise.all(updatePromises)
-            // console.log(details)
             return { matchSale , details}
         } catch (error) {
             throw error

@@ -126,7 +126,7 @@ export default class SalesUsecase {
             }
         })
         console.log(details)
- 
+        console.log(data)
         return this.salesRepository.createSale(data, details)
     }
 }

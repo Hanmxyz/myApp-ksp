@@ -28,6 +28,7 @@ export default class VendorSalesRepository{
                         vendorProductId : p.vendorProductId,
                         salePrice : p.salePrice,
                         quantity : p.quantity,
+                        profitKsp: p.profitKsp,
                         subtotal : parseFloat(p.salePrice * p.quantity)
                     }))
                 },

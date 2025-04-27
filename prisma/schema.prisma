@@ -168,7 +168,7 @@ model VendorProduct {
   name          String    @db.VarChar(40)
   categoryId    Int
   sellPrice     Float
-  profitPercent Float
+  profitKsp     Float
   entryDate     DateTime  @default(now())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
@@ -276,6 +276,7 @@ model VendorSaleDetail {
   vendorProductId   Int
   salePrice         Int
   quantity          Int
+  profitKsp         Int
   subtotal          Float
   createdAt         DateTime  @default(now())
 
@@ -301,4 +302,12 @@ model PaymentVendorSale {
   paymentTotal      Int
   paymentDate       DateTime? @default(now())
   status            PaymentStatus
+}
+
+model OperationalCost {
+  id                Int      @id  @default(autoincrement())
+  staff             String    @db.VarChar(20)
+  description       String    @db.Text
+  cost              Int
+  createdAt         DateTime @default(now())
 }

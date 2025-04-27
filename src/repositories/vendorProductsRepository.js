@@ -10,6 +10,11 @@ export default class VendorProductsRepository{
         })
     }
 
+    async getAllVendorProductsForTx() {
+        return await prisma.vendorProduct.findMany({
+        })
+    }
+
     async getVendorProductById(id) {
         return await prisma.vendorProduct.findUnique({
             where : { id : Number(id)}
@@ -32,7 +37,7 @@ export default class VendorProductsRepository{
                 name : data.name,
                 categoryId : data.categoryId,
                 sellPrice : data.sellPrice,
-                profitPercent : data.profitPercent,
+                profitKsp : data.profitKsp,
                 entryDate : data.entryDate,
                 updatedAt : new Date()
             }

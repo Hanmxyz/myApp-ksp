@@ -12,18 +12,32 @@ export default class VendorProductsUsecase{
                 name : p.name,
                 category : p.category.name,
                 sellPrice : p.sellPrice,
-                profitPercent : p.profitPercent,
+                profitKsp : p.profitKsp,
                 entryDate : p.entryDate
             }
         })
 
         return {
             title : "vendorProduct",
-            header : ["id", "vendor", "name", "category", "sellPrice", "profitPercent", "entryDate"],
+            header : ["id", "vendor", "name", "category", "sellPrice", "profit", "entryDate"],
             data : vendorProduct
         }
     }
 
+    async getAllVendorProductsForTx() {
+        const data = await this.vendorProductsRepository.getAllVendorProductsForTx()
+        const newData = data.map( item => {
+            return {
+                id : item.id,
+                vendorId : item.vendorId,
+                name : item.name,
+                categoryId : item.categoryId,
+                sellPrice : (item.sellPrice + item.profitKsp),
+                profitKsp : item.profitKsp
+            }
+        })
+        return newData
+    }
     async getVendorProductById(id) {
         return await this.vendorProductsRepository.getVendorProductById(id)
     }
@@ -36,13 +50,13 @@ export default class VendorProductsUsecase{
                 name : p.name,
                 category : p.category.name,
                 sellPrice : p.sellPrice,
-                profitPercent : p.profitPercent
+                profitKsp : p.profitKsp
             }
         })
 
         const newData = {
             title : "daftar barang",
-            header : ["id","Nama barang", "kategori", "harga jual", "persen untung"],
+            header : ["id","Nama barang", "kategori", "harga jual", "keuntungan"],
             data : product
         }
 
