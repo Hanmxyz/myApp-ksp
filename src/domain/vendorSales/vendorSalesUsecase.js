@@ -20,7 +20,7 @@ export default class VendorSalesUsecase {
         const dateNow = isoString.slice(0,10)
         // console.log(dateNow)
         
-        const profitKsp = data.product.reduce((acc, curr) => acc + curr.profitKsp, 0)
+        const profitKsp = data.product.reduce((acc, curr) => acc + (curr.profitKsp * curr.quantity), 0)
         const newData = {
             nip: data.nip,
             totalAmount: data.totalAmount,
