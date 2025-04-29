@@ -20,10 +20,11 @@ export default class VendorSalesUsecase {
         const dateNow = isoString.slice(0,10)
         // console.log(dateNow)
         
+        const profitKsp = data.product.reduce((acc, curr) => acc + curr.profitKsp, 0)
         const newData = {
             nip: data.nip,
             totalAmount: data.totalAmount,
-            profitKsp: data.profitKsp,
+            profitKsp: profitKsp,
             paymentMetode: data.paymentMetode,
             paymentStatus: data.paymentStatus,
             product : data.product.map ( p => ({
@@ -37,11 +38,11 @@ export default class VendorSalesUsecase {
 
        try {
         for (const item of newData.product) {
-            // console.log(item)
+            console.log(item)
             const checkVendor = await this.vendorProductsRepository.getVendorProductById(item.vendorProductId)
-            // console.log(checkVendor)
+            console.log(checkVendor)
             const checkPaymentVendor = await this.paymentVendorSaleRepository.getVendorPayment(checkVendor.vendorId)
-            // console.log(checkPaymentVendor)
+            console.log(checkPaymentVendor)
             if (!checkPaymentVendor) {
                 const data = {
                     vendorId: checkVendor.vendorId,

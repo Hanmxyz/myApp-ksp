@@ -20,7 +20,7 @@ export default class VendorSalesRepository{
             data :{
                 nip : data.nip,
                 totalAmount : data.totalAmount,
-                profitKsp : parseFloat(100),
+                profitKsp : data.profitKsp,
                 paymentMetode : data.paymentMetode,
                 paymentStatus : data.paymentStatus,
                 details : {

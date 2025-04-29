@@ -237,6 +237,7 @@ model PurchaseDetail {
   wholesalePrice Float
   quantity       Int
   subtotal       Float
+  createdAt      DateTime @default(now())
   purchase       Purchase @relation(fields: [purchaseId], references: [id])
   product        Product  @relation(fields: [productId], references: [id])
   stock          Stock    @relation(fields: [stockId], references: [id])
