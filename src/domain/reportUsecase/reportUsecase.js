@@ -27,10 +27,10 @@ export default class ReportUsecase {
     }
 
     async getAllPurchases(queryString) {
-        const { purchases, purchasesDetails } = await this.reportRepository.getAllPurchases(queryString)
+        const { purchases, purchaseDetails } = await this.reportRepository.getAllPurchases(queryString)
 
         const data = purchases.map(item => {
-            const details = purchasesDetails.filter(detail => detail.purchaseId === item.id)
+            const details = purchaseDetails.filter(detail => detail.purchaseId === item.id)
             return {
                 id: item.id,
                 purchaseDate: item.purchaseDate,
