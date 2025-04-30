@@ -1,4 +1,5 @@
 import express from "express"
+import dashboardRouter from "./src/router/dashboardRouter.js"
 import productsRouter from "./src/router/productsRouter.js"
 import categoriesRouter from "./src/router/categoriesRouter.js"
 import productUnitsRouter from "./src/router/productUnitsRouter.js"
@@ -27,6 +28,8 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+
+app.use("/api", dashboardRouter)
 
 app.use("/api", productsRouter)
 app.use("/api", categoriesRouter)
