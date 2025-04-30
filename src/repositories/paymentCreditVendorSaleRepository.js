@@ -90,7 +90,7 @@ export default class PaymentCreditVendorSaleRepository {
     
     async updateCreditMemberByNipPerMonth(data, queryString) {
         const year = queryString.year
-        const month = queryString.month
+        const month = parseInt(queryString.month) - 1
         const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
         const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
 

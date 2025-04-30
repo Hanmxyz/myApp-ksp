@@ -92,12 +92,13 @@ export default class PaymentCreditSalesRepository {
 
     async updateCreditMemberByNipPerMonth(data, queryString) {
         const year = queryString.year
-        const month = queryString.month
+        const month = parseInt(queryString.month) - 1
         const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
         const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
 
         try {
             const updatePromises = data.map(async (item) => {
+                console.log(item)
                 return prisma.paymentCreditSale.updateMany({
                     where: {
                         nip: String(item.nip),
@@ -105,12 +106,14 @@ export default class PaymentCreditSalesRepository {
                             gte: startDate,
                             lte: endDate,
                         },
-                    }, data: {
+                    }, 
+                    data: {
                         status: item.status
                     }
                 })
             })
             const result = await Promise.all(updatePromises)
+            return result
         } catch (error) {
             throw error
         }
