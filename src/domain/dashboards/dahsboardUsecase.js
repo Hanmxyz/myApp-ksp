@@ -15,6 +15,7 @@ export default class DashboardUsecase {
         const { allOpcost, todayOpcost } = await this.dashboardRepository.getOpcostDashboard()
         const allProducts = await this.ProductsUsecase.getAllProducts()
 
+        console.log(allProfitSales, todayProfitSales)
         let allPs = 0
         let todayPs = 0
         for (const item of allProfitSales) {
@@ -27,9 +28,7 @@ export default class DashboardUsecase {
         const notifMinSock = allProducts.data.map( item => {
             if(item.stock <= item.minStock) {
                 return { name : item.name, message : "stock dibawah minimal", stock : `${item.stock} < ${item.minStock}`}
-            } else {
-
-            }
+            } 
         }).filter(Boolean)
 
         const data = {

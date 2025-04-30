@@ -79,7 +79,7 @@ export default class DashboardRepository {
                 where : {
                     createdAt : {
                         gte : today,
-                        lte : today
+                        lte : tomorrow
                     }
                 },
                 select : {
