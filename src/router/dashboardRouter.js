@@ -12,6 +12,7 @@ const dashboardHandler = new DashboardHandler(dashboardUsecase)
 
 
 router.get("/dashboard", (req,res) => { dashboardHandler.getDashboards(req,res)})
+router.get("/dashboard/chart", (req,res) => { dashboardHandler.getChartDashboard(req,res)})
 
 
 export default router

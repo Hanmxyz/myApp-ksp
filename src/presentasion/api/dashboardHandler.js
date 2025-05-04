@@ -12,4 +12,14 @@ export default class DashboardHandler{
         }
     }
 
+    async getChartDashboard(req,res) {
+        try {
+            const queryString = req.query
+            const data = await this.dashboardUsecase.getChartDashboard(queryString)
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
 }
