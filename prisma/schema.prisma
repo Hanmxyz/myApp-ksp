@@ -192,7 +192,7 @@ model Stock {
 model Sale {
   id             Int          @id @default(autoincrement())
   saleDate       DateTime     @default(now())
-  nip            String       @db.VarChar(10)
+  nip            String       @db.VarChar(20)
   totalAmount    Float
   paymentType    PaymentType
   paymentStatus  PaymentStatus
@@ -246,7 +246,7 @@ model PurchaseDetail {
 model PaymentCreditSale {
   id                Int     @id @default(autoincrement())
   saleId            Int
-  nip               String  @db.VarChar(10)
+  nip               String  @db.VarChar(20)
   paymentTotal      Float
   paymentDate       DateTime?
   status            TransactionStatus
@@ -257,7 +257,7 @@ model PaymentCreditSale {
 
 model VendorSale {
   id                Int     @id @default(autoincrement())
-  nip               String  @db.VarChar(10)     
+  nip               String  @db.VarChar(20)     
   totalAmount       Float
   profitKsp         Float
   transactionDate   DateTime @default(now())
@@ -288,7 +288,7 @@ model VendorSaleDetail {
 model PaymentCreditVendorSale {
   id                Int      @id @default(autoincrement())
   vendorSaleId      Int
-  nip               String  @db.VarChar(10)     
+  nip               String  @db.VarChar(20)     
   paymentTotal      Int
   paymentDate       DateTime
   status            TransactionStatus
