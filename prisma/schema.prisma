@@ -86,7 +86,7 @@ model ProductUnit {
 }
 
 model Member {
-  nip               String    @id @db.VarChar(15)
+  nip               String    @id @db.VarChar(20)
   name              String?   @db.VarChar(50)
   accountNumber     String    @unique @db.VarChar(20)
   bank              String    @db.VarChar(20)
