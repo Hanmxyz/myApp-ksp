@@ -2,8 +2,7 @@ class ProductsUsecase {
     constructor(productsRepository) {
         this.productsRepository = productsRepository;
     }
-
-    async getAllProducts() {
+    async getAllP() {
         const data = await this.productsRepository.getAllProducts();
         const stock = data.stock.map(p => {
             return {
@@ -33,31 +32,47 @@ class ProductsUsecase {
 
         const product = updateProduct.map(p => {
             return {
-                id : p.id,
-                name : p.name,
-                purchasePrice : p.purchasePrice,
-                retailPrice : p.retailPrice,
-                wholesalePrice : p.wholesalePrice,
-                stock : p.stock,
-                minStock : p.minStock,
-                barcode : p.barcode,
-                image : p.image,
-                category : p.category.name,
-                size : p.size,
-                unit : p.unit.name,
-                isActive : p.isActive
+                id: p.id,
+                name: p.name,
+                purchasePrice: p.purchasePrice,
+                retailPrice: p.retailPrice,
+                wholesalePrice: p.wholesalePrice,
+                stock: p.stock,
+                minStock: p.minStock,
+                barcode: p.barcode,
+                image: p.image,
+                category: p.category.name,
+                size: p.size,
+                unit: p.unit.name,
+                isActive: p.isActive
             }
         })
-        const newData = {
+
+        return product
+    }
+    async getAllProducts() {
+        const product = await this.getAllP()
+        const productIdStatus = product.map(item => {
+            if (item.stock === 0) {
+                return { id: item.id }
+            }
+        }).filter(item => item !== undefined && item !== null)
+        await this.productsRepository.updateProductByGet(productIdStatus)
+        const newProduct = await this.getAllP()
+        return {
             title: "product",
             header: ["id", "name", "purchasePrice", "retailPrice", "wholesalePrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
-            data: product
+            data: newProduct
         }
-
-
-        return newData
     }
 
+    async getAllProductSearch() {
+        const product = await this.getAllP()
+        const data = product.filter( item => 
+            item.isActive === "YES"
+        )
+        return data
+    }
     async getProductById(id) {
         return await this.productsRepository.getProductById(id);
     }

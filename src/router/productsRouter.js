@@ -10,6 +10,7 @@ const productsUsecase = new ProductsUsecase(productsRepository);
 const productsHandler = new ProductsHandler(productsUsecase);
 
 router.get('/product', (req,res) => {productsHandler.getAllProducts(req,res)})
+router.get('/product_search', (req,res) => {productsHandler.getAllProductSearch(req,res)})
 router.get('/product/:id', (req,res) => {productsHandler.getProductById(req,res)})
 router.post('/product', (req,res) => {productsHandler.createProduct(req,res)})
 router.put('/product/:id', (req,res) => {productsHandler.updateProduct(req,res)})

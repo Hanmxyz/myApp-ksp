@@ -95,13 +95,6 @@ export default class SalesUsecase {
         })
         await Promise.all(updateStockProductPromise)
 
-        //create credit 
-
-        // if(data.paymentMetode === "bon") {
-
-        // }
-
-        //create details
         const details = data.product.map( p => {
             const stockIdByProduct = updateProducts.find(item => item.id === p.productId)
             if (stockIdByProduct.stock > 0) {

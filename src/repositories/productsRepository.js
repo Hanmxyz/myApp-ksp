@@ -3,14 +3,14 @@ import { prisma } from "../../server.js"
 export default class ProductsRepository {
     async getAllProducts() {
         const stock = await prisma.stock.findMany()
-        const product =  await prisma.product.findMany({
-            include : {
-                category : true,
-                unit : true
+        const product = await prisma.product.findMany({
+            include: {
+                category: true,
+                unit: true
             }
         });
 
-        return { stock, product}
+        return { stock, product }
     };
     async getProductById(id) {
         return await prisma.product.findUnique({
@@ -20,11 +20,11 @@ export default class ProductsRepository {
 
     async getProductStockById(id) {
         return await prisma.product.findUnique({
-            where : { id : Number(id) },
-            select : {
-                id : true,
-                stock : true,
-                updatedAt : true
+            where: { id: Number(id) },
+            select: {
+                id: true,
+                stock: true,
+                updatedAt: true
             }
         })
     }
@@ -53,9 +53,28 @@ export default class ProductsRepository {
             data: productData,
         });
     }
+
+    async updateProductByGet(productId) {
+        const updatePromises = productId.map(item => {
+            return prisma.product.update({
+                where: { id: Number(item.id) },
+                data: {
+                    isActive: "NO",
+                },
+            });
+        });
+
+        try {
+            const updatedProducts = await Promise.all(updatePromises);
+            return updatedProducts;
+        } catch (error) {
+            throw error; // Atau tangani kesalahan sesuai kebutuhan aplikasi Anda
+        }
+
+    }
     async deleteProduct(id) {
         return await prisma.product.delete({
-            where: { id: Number(id) },
+            where: { id: Number(id) }
         });
     }
 
@@ -63,7 +82,7 @@ export default class ProductsRepository {
         return await prisma.product.update({
             where: { id: Number(id) },
             data: {
-                stock : data
+                stock: data
             }
         });
     }

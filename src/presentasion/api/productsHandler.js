@@ -12,6 +12,15 @@ class ProductsHandler {
         };
     }
 
+    async getAllProductSearch(req,res) {
+        try {
+            const data = await this.ProductsUsecase.getAllProductSearch()
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async getProductById(req,res) {
         try {
             const id = req.params.id
