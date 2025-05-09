@@ -53,5 +53,13 @@ export default class ReportHandler{
         }
     }
 
-
+    async getAllPaymentVendors(req,res) {
+        try {
+            const queryString = req.query
+            const data = await this.reportUsecase.getAllPaymentVendors(queryString)
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
 }

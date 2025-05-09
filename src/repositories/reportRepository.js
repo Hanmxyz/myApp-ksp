@@ -163,4 +163,32 @@ export default class ReportRepository {
             throw error
         }
     }
+
+    async getAllPaymentVendors(queryString) {
+        try {
+            const year = queryString.year
+            const month = parseInt(queryString.month) - 1
+            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const payment = await prisma.paymentVendorSale.findMany({
+                where : {
+                    paymentDate : {
+                        gte : startDate,
+                        lte : endDate
+                    }
+                },
+            })
+            const vendor = await prisma.vendor.findMany({
+                select : {
+                    id: true,
+                    name : true
+                }
+            })
+
+            return { payment, vendor }
+        } catch (error) {
+            throw error
+            
+        }
+    }
 }

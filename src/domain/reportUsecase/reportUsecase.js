@@ -102,4 +102,21 @@ export default class ReportUsecase {
     async getAllOperationalCosts(queryString) {
         return await this.reportRepository.getAllOperationalCosts(queryString)
     }
+
+    async getAllPaymentVendors(queryString) {
+        const { payment, vendor } = await this.reportRepository.getAllPaymentVendors(queryString)
+
+        const data = payment.map( item => {
+            const name = vendor.find( i => i.id === item.vendorId)
+            return {
+                id : item.id,
+                date : item.paymentDate,
+                name : name.name,
+                total : item.paymentTotal,
+                status : item.status
+            }
+        })
+
+        return data
+    }
 }

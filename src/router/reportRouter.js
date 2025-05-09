@@ -16,6 +16,7 @@ router.get("/report/purchase" , (req,res) => { reportHandler.getAllPurchases(req
 router.get("/report/credit" , (req,res) => { reportHandler.getAllCredits(req,res)})
 router.get("/report/vendorsale" , (req,res) => { reportHandler.getAllVendorSales(req,res)})
 router.get("/report/opcost" , (req,res) => { reportHandler.getAllOperationalCosts(req,res)})
+router.get("/report/paymentvendor", (req,res) => { reportHandler.getAllPaymentVendors(req,res)})
 
 
 export default router
