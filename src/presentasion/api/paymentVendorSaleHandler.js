@@ -13,6 +13,15 @@ export default class PaymentVendorSaleHandler{
         }
     }
 
+    async getAllVendorPayment(req,res) {
+        try {
+            const data = await this.paymentVendorSaleUsecase.getAllVendorPayment()
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+    }
+
     async updatePaymentVendorSale(req,res){
         try {
             const id = req.params.id

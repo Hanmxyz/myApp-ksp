@@ -11,6 +11,7 @@ const paymentVendorSaleUsecase = new PaymentVendorSaleUsecase(paymentVendorSaleR
 const paymentVendorSaleHandler = new PaymentVendorSaleHandler(paymentVendorSaleUsecase)
 
 
+// router.get("/payment_vendor_search", (req,res) => {paymentVendorSaleHandler.getAllVendorPayment(req,res)})
 router.get("/payment_vendor/:id", (req,res) => {paymentVendorSaleHandler.getPaymentVendorSaleWithDetail(req,res)})
 router.put("/payment_vendor/:id", (req,res) => {paymentVendorSaleHandler.updatePaymentVendorSale(req,res)})
 

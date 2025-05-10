@@ -40,6 +40,23 @@ export default class PaymentVendorSaleRepository {
         })
     }
 
+    async getAllVendorPayment() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        const payment =  await prisma.paymentVendorSale.findMany({
+            where: {
+                paymentDate : {
+                    gte: today,
+                    lt: tomorrow,
+                  },
+            }
+        })
+        const vendor = await prisma.vendorSale.findMany()
+        return { payment, vendor}
+    }
+
     async createPaymentVendorSale(data) {
         return await prisma.paymentVendorSale.create({
             data : {

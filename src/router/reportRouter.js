@@ -1,7 +1,7 @@
 import express from "express";
 
 import ReportRepository from "../repositories/reportRepository.js";
-import ReportUsecase from "../domain/reportUsecase/reportUsecase.js";
+import ReportUsecase from "../domain/report/reportUsecase.js";
 import ReportHandler from "../presentasion/api/reportHandler.js";
 
 
