@@ -40,15 +40,19 @@ export default class SalesUsecase {
     async createSale(data) {
         const updateProducts = []
         const updateStocks = []
-
+        console.log(updateProducts)
+        console.log(updateStocks)
         const getStockOnProductPromise = data.product.map(async (p) => {
+            
             return await this.productRepository.getProductStockById(p.productId)
         })
         const getStockOnProduct = await Promise.all(getStockOnProductPromise)
+        console.log(getStockOnProductPromise)
         const getStockOnStockPromise = data.product.map(async (p) => {
             return await this.stockRepository.getStocksByProductId(p.productId)
         })
         const getStockOnStock = (await Promise.all(getStockOnStockPromise)).flat()
+        console.log(getStockOnStock)
         
 
         

@@ -13,7 +13,7 @@ export default class ProductUnitsUsecase {
             }
         })
         const newData = {
-            title : "category",
+            title : "units",
             header : ["id", "name", "isActive"],
             data : category
         }

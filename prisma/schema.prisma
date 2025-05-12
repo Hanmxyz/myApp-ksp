@@ -43,272 +43,323 @@ enum TransactionStatus {
   cicilan
 }
 model Category {
-  id             Int             @id @default(autoincrement())
-  name           String          @db.VarChar(40)
-  isActive       Status          @default(YES)
-  products       Product[]
+  id             Int             @id @default(autoincrement()) @map("id")
+  name           String          @db.VarChar(40) @map("name")
+  isActive       Status          @default(YES) @map("is_active")
+  products       Product[]        
   vendorProducts VendorProduct[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime?       @updatedAt
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime?       @updatedAt  @map("updated_at")
+
+  @@map("categories")
 }
 
 model Product {
-  id             Int     @id @default(autoincrement())
-  name           String  @db.VarChar(40)
-  purchasePrice  Int
-  retailPrice    Int
-  wholesalePrice Int
-  stock          Int
-  stocks         Stock[]
-  minStock       Int
-  barcode        String  @unique @db.VarChar(50)
-  image          String? @db.VarChar(100)
-  categoryId     Int
-  size           Int
-  unitId         Int
-  isActive       Status  @default(YES)
+  id              Int             @id @default(autoincrement()) @map("id")
+  name            String          @db.VarChar(40) @map("name")
+  purchasePrice   Int             @map("purchase_price")
+  retailPrice     Int             @map("retail_price")
+  wholesalePrice  Int             @map("wholesale_price")
+  stock           Int             @map("stock")
+  stocks          Stock[]
+  minStock        Int             @map("min_stock")
+  barcode         String          @unique @db.VarChar(50) @map("barcode")
+  image           String?         @db.VarChar(100) @map("image")
+  categoryId      Int             @map("category_id")
+  size            Int             @map("size")
+  unitId          Int             @map("unit_id")
+  isActive        Status          @default(YES) @map("is_active")
 
-  unit            ProductUnit      @relation(fields: [unitId], references: [id])
-  category        Category         @relation(fields: [categoryId], references: [id])
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime?        @updatedAt
+  unit            ProductUnit     @relation(fields: [unitId], references: [id])
+  category        Category        @relation(fields: [categoryId], references: [id])
+
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime?       @updatedAt @map("updated_at")
+
   saleDetails     SaleDetail[]
   purchaseDetails PurchaseDetail[]
+
+  @@map("products")
 }
 
 model ProductUnit {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(40)
-  isActive  Status    @default(YES)
+  id        Int       @id @default(autoincrement()) @map("id")
+  name      String    @db.VarChar(40) @map("name")
+  isActive  Status    @default(YES) @map("is_active")
   products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("product_units")
 }
 
 model Member {
-  nip               String    @id @db.VarChar(20)
-  name              String?   @db.VarChar(50)
-  accountNumber     String    @unique @db.VarChar(20)
-  bank              String    @db.VarChar(20)
-  phoneNumber       String    @db.VarChar(15)
-  address           String    @db.Text
-  creditLimit       Int
-  isActive          Status    @default(YES)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime? @updatedAt
-  
-  sales             Sale[]
-  vendorSale        VendorSale[]
-  creditSales       PaymentCreditSale[]
+  nip             String                @id @db.VarChar(20) @map("nip")
+  name            String?               @db.VarChar(50) @map("name")
+  accountNumber   String                @unique @db.VarChar(20) @map("account_number")
+  bank            String                @db.VarChar(20) @map("bank")
+  phoneNumber     String                @db.VarChar(15) @map("phone_number")
+  address         String                @db.Text @map("address")
+  creditLimit     Int                   @map("credit_limit")
+  isActive        Status                @default(YES) @map("is_active")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime?             @updatedAt @map("updated_at")
+  sales           Sale[]
+  vendorSale      VendorSale[]
+  creditSales     PaymentCreditSale[]
   vendorCreditSales PaymentCreditVendorSale[]
+
+  @@map("members")
 }
 
 model Management {
-  id                Int                @id @default(autoincrement())
-  name              String             @db.VarChar(50)
-  isActive          Status             @default(YES)
+  id              Int                @id @default(autoincrement()) @map("id")
+  name            String             @db.VarChar(50) @map("name")
+  isActive        Status             @default(YES) @map("is_active")
   managementDetails ManagementDetail[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime?          @updatedAt
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime?          @updatedAt @map("updated_at")
+
+  @@map("managements")
 }
 
 model ManagementDetail {
-  id           Int      @id @default(autoincrement())
-  year         Int      @db.Year
-  nip          String   @db.VarChar(20) // MUST BE SCALAR
-  managementId Int
-  startDate    DateTime @db.Date
-  endDate      DateTime @db.Date
-  allowance    Decimal? @db.Decimal(10, 2)
-  isActive     Status   @default(YES)
+  id           Int       @id @default(autoincrement()) @map("id")
+  year         Int       @db.Year @map("year")
+  nip          String    @db.VarChar(20) @map("nip") // MUST BE SCALAR
+  managementId Int       @map("management_id")
+  startDate    DateTime  @db.Date @map("start_date")
+  endDate      DateTime  @db.Date @map("end_date")
+  allowance    Decimal?  @db.Decimal(10, 2) @map("allowance")
+  isActive     Status    @default(YES) @map("is_active")
+  management   Management @relation(fields: [managementId], references: [id])
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
 
-  management Management @relation(fields: [managementId], references: [id])
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime?  @updatedAt
+  @@map("management_details")
 }
 
 model Supplier {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(100)
-  address     String     @db.Text
-  phoneNumber String     @db.VarChar(15)
-  company     String     @db.VarChar(100)
-  isActive    Status     @default(YES)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime?  @updatedAt
+  id          Int       @id @default(autoincrement()) @map("id")
+  name        String    @db.VarChar(100) @map("name")
+  address     String    @db.Text @map("address")
+  phoneNumber String    @db.VarChar(15) @map("phone_number")
+  company     String    @db.VarChar(100) @map("company")
+  isActive    Status    @default(YES) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
   purchases   Purchase[]
+
+  @@map("suppliers")
 }
 
 model Staff {
-  id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(100)
-  phoneNumber String    @db.VarChar(15)
-  username    String    @unique @db.VarChar(50)
-  password    String    @db.VarChar(255)
-  isActive    Status    @default(YES)
-  level       UserLevel
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
+  id          Int       @id @default(autoincrement()) @map("id")
+  name        String    @db.VarChar(100) @map("name")
+  phoneNumber String    @db.VarChar(15) @map("phone_number")
+  username    String    @unique @db.VarChar(50) @map("username")
+  password    String    @db.VarChar(255) @map("password")
+  isActive    Status    @default(YES) @map("is_active")
+  level       UserLevel @map("level")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  @@map("staffs")
 }
 
 model Vendor {
-  id          Int             @id @default(autoincrement())
-  name        String          @db.VarChar(40)
-  phoneNumber String          @db.VarChar(15)
-  address     String          @db.Text
-  isActive    Status          @default(YES)
+  id          Int             @id @default(autoincrement()) @map("id")
+  name        String          @db.VarChar(40) @map("name")
+  phoneNumber String          @db.VarChar(15) @map("phone_number")
+  address     String          @db.Text @map("address")
+  isActive    Status          @default(YES) @map("is_active")
   products    VendorProduct[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime?       @updatedAt
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime?       @updatedAt @map("updated_at")
+
+  @@map("vendors")
 }
 
 model VendorProduct {
-  id            Int       @id @default(autoincrement())
-  vendorId      Int
-  name          String    @db.VarChar(40)
-  categoryId    Int
-  sellPrice     Float
-  profitKsp     Float
-  entryDate     DateTime  @default(now())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  id            Int       @id @default(autoincrement()) @map("id")
+  vendorId      Int       @map("vendor_id")
+  name          String    @db.VarChar(40) @map("name")
+  categoryId    Int       @map("category_id")
+  sellPrice     Float     @map("sell_price")
+  profitKsp     Float     @map("profit_ksp")
+  entryDate     DateTime  @default(now()) @map("entry_date")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime? @updatedAt @map("updated_at")
   vendorSales   VendorSaleDetail[]
+  vendor        Vendor    @relation(fields: [vendorId], references: [id])
+  category      Category  @relation(fields: [categoryId], references: [id])
 
-  vendor   Vendor   @relation(fields: [vendorId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
+  @@map("vendor_products")
 }
 
 model Stock {
-  id            Int      @id @default(autoincrement())
-  productId     Int
-  purchasePrice Int
-  stock         Int
-  entryDate     DateTime @default(now())
-
+  id                Int              @id @default(autoincrement()) @map("id")
+  productId         Int              @map("product_id")
+  purchasePrice     Int              @map("purchase_price")
+  stock             Int              @map("stock")
+  entryDate         DateTime         @default(now()) @map("entry_date")
+  
   product           Product          @relation(fields: [productId], references: [id])
   PurchaseToDetails PurchaseDetail[]
+
+  @@map("stocks")
 }
 
 model Sale {
-  id             Int          @id @default(autoincrement())
-  saleDate       DateTime     @default(now())
-  nip            String       @db.VarChar(20)
-  totalAmount    Float
-  paymentType    PaymentType
-  paymentStatus  PaymentStatus
-  paymentMetode  PaymentMetode
-  details        SaleDetail[]
-  credit         PaymentCreditSale[]
-  member         Member       @relation(fields: [nip], references: [nip])
+  id            Int                 @id @default(autoincrement()) @map("id")
+  saleDate      DateTime            @default(now()) @map("sale_date")
+  nip           String              @db.VarChar(20) @map("nip")
+  totalAmount   Float               @map("total_amount")
+  paymentType   PaymentType         @map("payment_type")
+  paymentStatus PaymentStatus       @map("payment_status")
+  paymentMetode PaymentMetode       @map("payment_metode")
+  details       SaleDetail[]
+  credit        PaymentCreditSale[]
+  member        Member              @relation(fields: [nip], references: [nip])
+
+  @@map("sales")
 }
 
 model SaleDetail {
-  id            Int     @id @default(autoincrement())
-  saleId        Int
-  productId     Int
-  stockId       Int
-  purchasePrice Float
-  salePrice     Float
-  quantity      Int
-  subtotal      Float
-  createdAt     DateTime @default(now())
+  id            Int      @id @default(autoincrement()) @map("id")
+  saleId        Int      @map("sale_id")
+  productId     Int      @map("product_id")
+  stockId       Int      @map("stock_id")
+  purchasePrice Float    @map("purchase_price")
+  salePrice     Float    @map("sale_price")
+  quantity      Int      @map("quantity")
+  subtotal      Float    @map("subtotal")
+  createdAt     DateTime @default(now()) @map("created_at")
+  sale          Sale     @relation(fields: [saleId], references: [id])
+  product       Product  @relation(fields: [productId], references: [id])
 
-  sale          Sale    @relation(fields: [saleId], references: [id])
-  product       Product @relation(fields: [productId], references: [id])
+  @@map("sale_details")
 }
 
+
 model Purchase {
-  id           Int              @id @default(autoincrement())
-  purchaseDate DateTime
-  supplierId   Int
-  totalAmount  Float
-  isPaid       Status
+  id           Int              @id @default(autoincrement()) @map("id")
+  purchaseDate DateTime         @map("purchase_date")
+  supplierId   Int              @map("supplier_id")
+  totalAmount  Float            @map("total_amount")
+  isPaid       Status           @map("is_paid")
   details      PurchaseDetail[]
   supplier     Supplier         @relation(fields: [supplierId], references: [id])
+
+  @@map("purchases")
 }
 
 model PurchaseDetail {
-  id             Int      @id @default(autoincrement())
-  purchaseId     Int
-  productId      Int
-  stockId        Int
-  purchasePrice  Float
-  retailPrice    Float
-  wholesalePrice Float
-  quantity       Int
-  subtotal       Float
-  createdAt      DateTime @default(now())
+  id             Int      @id @default(autoincrement()) @map("id")
+  purchaseId     Int      @map("purchase_id")
+  productId      Int      @map("product_id")
+  stockId        Int      @map("stock_id")
+  purchasePrice  Float    @map("purchase_price")
+  retailPrice    Float    @map("retail_price")
+  wholesalePrice Float    @map("wholesale_price")
+  quantity       Int      @map("quantity")
+  subtotal       Float    @map("subtotal")
+  createdAt      DateTime @default(now()) @map("created_at")
   purchase       Purchase @relation(fields: [purchaseId], references: [id])
   product        Product  @relation(fields: [productId], references: [id])
   stock          Stock    @relation(fields: [stockId], references: [id])
+
+  @@map("purchase_details")
 }
 
 model PaymentCreditSale {
-  id                Int     @id @default(autoincrement())
-  saleId            Int
-  nip               String  @db.VarChar(20)
-  paymentTotal      Float
-  paymentDate       DateTime?
-  status            TransactionStatus
+  id            Int              @id @default(autoincrement()) @map("id")
+  saleId        Int              @map("sale_id")
+  nip           String           @db.VarChar(20) @map("nip")
+  paymentTotal  Float            @map("payment_total")
+  paymentDate   DateTime?        @map("payment_date")
+  status        TransactionStatus @map("status")
+  sale          Sale             @relation(fields: [saleId], references: [id])
+  member        Member           @relation(fields: [nip], references: [nip])
 
-  sale              Sale    @relation(fields: [saleId], references : [id])
-  member            Member  @relation(fields: [nip],  references : nip)
+  @@map("payment_credit_sales")
 }
 
 model VendorSale {
-  id                Int     @id @default(autoincrement())
-  nip               String  @db.VarChar(20)     
-  totalAmount       Float
-  profitKsp         Float
-  transactionDate   DateTime @default(now())
-  paymentMetode     PaymentMetode
-  paymentStatus     PaymentStatus
+  id              Int                 @id @default(autoincrement()) @map("id")
+  nip             String              @db.VarChar(20) @map("nip")
+  totalAmount     Float               @map("total_amount")
+  profitKsp       Float               @map("profit_ksp")
+  transactionDate DateTime            @default(now()) @map("transaction_date")
+  paymentMetode   PaymentMetode       @map("payment_metode")
+  paymentStatus   PaymentStatus       @map("payment_status")
+  details         VendorSaleDetail[]
+  credit          PaymentCreditVendorSale[]
+  member          Member              @relation(fields: [nip], references: [nip])
 
-  details           VendorSaleDetail[]
-  credit            PaymentCreditVendorSale[]
-
-  
-  member            Member  @relation(fields: [nip],  references : nip)
+  @@map("vendor_sales")
 }
 
 model VendorSaleDetail {
-  id                Int     @id  @default(autoincrement())
-  vendorSaleId      Int
-  vendorProductId   Int
-  salePrice         Int
-  quantity          Int
-  profitKsp         Int
-  subtotal          Float
-  createdAt         DateTime  @default(now())
+  id              Int      @id @default(autoincrement()) @map("id")
+  vendorSaleId    Int      @map("vendor_sale_id")
+  vendorProductId Int      @map("vendor_product_id")
+  salePrice       Int      @map("sale_price")
+  quantity        Int      @map("quantity")
+  profitKsp       Int      @map("profit_ksp")
+  subtotal        Float    @map("subtotal")
+  createdAt       DateTime @default(now()) @map("created_at")
+  vendorSale      VendorSale    @relation(fields: [vendorSaleId], references: [id])
+  vendorProduct   VendorProduct @relation(fields: [vendorProductId], references: [id])
 
-  vendorSale        VendorSale @relation(fields: [vendorSaleId], references : [id])
-  vendorProduct     VendorProduct @relation(fields: [vendorProductId], references : [id])
+  @@map("vendor_sale_details")
 }
 
 model PaymentCreditVendorSale {
-  id                Int      @id @default(autoincrement())
-  vendorSaleId      Int
-  nip               String  @db.VarChar(20)     
-  paymentTotal      Int
-  paymentDate       DateTime
-  status            TransactionStatus
+  id            Int              @id @default(autoincrement()) @map("id")
+  vendorSaleId  Int              @map("vendor_sale_id")
+  nip           String           @db.VarChar(20) @map("nip")
+  paymentTotal  Int              @map("payment_total")
+  paymentDate   DateTime         @map("payment_date")
+  status        TransactionStatus @map("status")
+  vendorSale    VendorSale       @relation(fields: [vendorSaleId], references: [id])
+  member        Member           @relation(fields: [nip], references: [nip])
 
-  vendorSale        VendorSale  @relation(fields: [vendorSaleId], references : [id])
-  member            Member  @relation(fields: [nip],  references : nip)
+  @@map("payment_credit_vendor_sales")
 }
 
 model PaymentVendorSale {
-  id                Int      @id  @default(autoincrement())
-  vendorId          Int
-  paymentTotal      Int
-  paymentDate       DateTime? @default(now())
-  status            PaymentStatus
+  id          Int           @id @default(autoincrement()) @map("id")
+  vendorId    Int           @map("vendor_id")
+  paymentTotal  Int           @map("payment_total")
+  paymentDate DateTime?     @default(now()) @map("payment_date")
+  status      PaymentStatus @map("status")
+
+  @@map("payment_vendor_sales")
 }
 
 model OperationalCost {
-  id                Int      @id  @default(autoincrement())
-  staff             String    @db.VarChar(20)
-  description       String    @db.Text
-  cost              Int
-  createdAt         DateTime @default(now())
+  id          Int      @id @default(autoincrement()) @map("id")
+  staff       String   @db.VarChar(20) @map("staff")
+  description String   @db.Text @map("description")
+  cost        Int      @map("cost")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("operational_costs")
+}
+
+
+model Role {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @db.VarChar(20) @map("name")
+
+  @@map("roles")
+}
+
+model User {
+  id       Int    @id @default(autoincrement()) @map("id")
+  username String @unique @db.VarChar(20) @map("username")
+  password String @db.VarChar(255) @map("password")
+
+  @@map("users")
 }
