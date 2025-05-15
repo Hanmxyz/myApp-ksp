@@ -42,6 +42,24 @@ enum TransactionStatus {
   lunas
   cicilan
 }
+
+model Role {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @db.VarChar(20) @map("name")
+
+  @@map("roles")
+}
+
+model User {
+  id       Int    @id @default(autoincrement()) @map("id")
+  name     String @db.VarChar(20) @map("name")
+  username String @unique @db.VarChar(20) @map("username")
+  password String @db.VarChar(255) @map("password")
+
+  sales    Sale[]
+
+  @@map("users")
+}
 model Category {
   id             Int             @id @default(autoincrement()) @map("id")
   name           String          @db.VarChar(40) @map("name")
@@ -218,9 +236,13 @@ model Sale {
   paymentType   PaymentType         @map("payment_type")
   paymentStatus PaymentStatus       @map("payment_status")
   paymentMetode PaymentMetode       @map("payment_metode")
+  totalPayment  Float               @map("total_payment")
+  change        Float               @map("change")
+  userId        Int                 @map("user_id")          
   details       SaleDetail[]
   credit        PaymentCreditSale[]
   member        Member              @relation(fields: [nip], references: [nip])
+  user          User                @relation(fields: [id], references: [id])
 
   @@map("sales")
 }
@@ -349,17 +371,3 @@ model OperationalCost {
 }
 
 
-model Role {
-  id   Int    @id @default(autoincrement()) @map("id")
-  name String @db.VarChar(20) @map("name")
-
-  @@map("roles")
-}
-
-model User {
-  id       Int    @id @default(autoincrement()) @map("id")
-  username String @unique @db.VarChar(20) @map("username")
-  password String @db.VarChar(255) @map("password")
-
-  @@map("users")
-}

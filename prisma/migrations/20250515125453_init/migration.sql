@@ -1,4 +1,23 @@
 -- CreateTable
+CREATE TABLE `roles` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `users` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20) NOT NULL,
+    `username` VARCHAR(20) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+
+    UNIQUE INDEX `users_username_key`(`username`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `categories` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(40) NOT NULL,
@@ -164,6 +183,9 @@ CREATE TABLE `sales` (
     `payment_type` ENUM('cash', 'transfer') NOT NULL,
     `payment_status` ENUM('lunas', 'belum_lunas') NOT NULL,
     `payment_metode` ENUM('cash', 'bon') NOT NULL,
+    `total_payment` DOUBLE NOT NULL,
+    `change` DOUBLE NOT NULL,
+    `user_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -283,24 +305,6 @@ CREATE TABLE `operational_costs` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `roles` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(20) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `users` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(20) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-
-    UNIQUE INDEX `users_username_key`(`username`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- AddForeignKey
 ALTER TABLE `products` ADD CONSTRAINT `products_unit_id_fkey` FOREIGN KEY (`unit_id`) REFERENCES `product_units`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -321,6 +325,9 @@ ALTER TABLE `stocks` ADD CONSTRAINT `stocks_product_id_fkey` FOREIGN KEY (`produ
 
 -- AddForeignKey
 ALTER TABLE `sales` ADD CONSTRAINT `sales_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `sales` ADD CONSTRAINT `sales_id_fkey` FOREIGN KEY (`id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `sale_details` ADD CONSTRAINT `sale_details_sale_id_fkey` FOREIGN KEY (`sale_id`) REFERENCES `sales`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

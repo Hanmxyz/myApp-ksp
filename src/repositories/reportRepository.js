@@ -2,13 +2,23 @@ import { prisma } from "../../server.js"
 
 export default class ReportRepository {
 
+    convertWIBtoUTC(dateStr, hour, minute = 0, second = 0, ms = 0) {
+        // Buat waktu lokal WIB
+        const local = new Date(`${dateStr}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}.${String(ms).padStart(3, '0')}`);
+        // Kurangi 7 jam untuk jadi UTC
+        return new Date(local.getTime() - (7 * 60 * 60 * 1000));
+    }
+
 
     async getAllSales(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const sale = await prisma.sale.findMany({
                 where: {
                     saleDate: {
@@ -40,10 +50,12 @@ export default class ReportRepository {
 
     async getAllPurchases(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const purchases = await prisma.purchase.findMany({
                 where: {
                     purchaseDate: {
@@ -77,10 +89,12 @@ export default class ReportRepository {
 
     async getAllCredits(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const creditSale = await prisma.paymentCreditSale.findMany({
                 where: {
                     paymentDate: {
@@ -113,15 +127,17 @@ export default class ReportRepository {
 
     async getAllVendorSales(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const vendorSale = await prisma.vendorSale.findMany({
                 where: {
-                    transactionDate : {
+                    transactionDate: {
                         gte: startDate,
-                    lte: endDate
+                        lte: endDate
                     }
                 },
                 include: {
@@ -130,10 +146,10 @@ export default class ReportRepository {
             })
             const vendorSaleDetail = await prisma.vendorSaleDetail.findMany({
                 where: {
-                   createdAt : {
-                    gte: startDate,
-                    lte: endDate
-                   }
+                    createdAt: {
+                        gte: startDate,
+                        lte: endDate
+                    }
                 },
                 include: {
                     vendorProduct: true
@@ -147,10 +163,12 @@ export default class ReportRepository {
 
     async getAllOperationalCosts(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             return await prisma.operationalCost.findMany({
                 where: {
                     createdAt: {
@@ -166,29 +184,31 @@ export default class ReportRepository {
 
     async getAllPaymentVendors(queryString) {
         try {
-            const year = queryString.year
-            const month = parseInt(queryString.month) - 1
-            const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
-            const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+            const startDate = convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            // const year = queryString.year
+            // const month = parseInt(queryString.month) - 1
+            // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
+            // const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const payment = await prisma.paymentVendorSale.findMany({
-                where : {
-                    paymentDate : {
-                        gte : startDate,
-                        lte : endDate
+                where: {
+                    paymentDate: {
+                        gte: startDate,
+                        lte: endDate
                     }
                 },
             })
             const vendor = await prisma.vendor.findMany({
-                select : {
+                select: {
                     id: true,
-                    name : true
+                    name: true
                 }
             })
 
             return { payment, vendor }
         } catch (error) {
             throw error
-            
+
         }
     }
 }

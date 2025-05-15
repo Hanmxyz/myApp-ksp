@@ -27,6 +27,9 @@ export default class SalesRepository {
                 paymentType : data.paymentType,
                 paymentStatus : data.paymentStatus,
                 paymentMetode : data.paymentMetode,
+                totalPayment : data.totalAmount,
+                change  : data.change,
+                userId : 1,
                 details : {
                     create : details.map( p => ({
                         productId : p.productId,
