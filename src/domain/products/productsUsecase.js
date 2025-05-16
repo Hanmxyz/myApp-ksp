@@ -36,7 +36,7 @@ class ProductsUsecase {
                 name: p.name,
                 purchasePrice: p.purchasePrice,
                 retailPrice: p.retailPrice,
-                wholesalePrice: p.wholesalePrice,
+                bonPrice: p.bonPrice,
                 stock: p.stock,
                 minStock: p.minStock,
                 barcode: p.barcode,
@@ -61,7 +61,7 @@ class ProductsUsecase {
         const newProduct = await this.getAllP()
         return {
             title: "product",
-            header: ["id", "name", "purchasePrice", "retailPrice", "wholesalePrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
+            header: ["id", "name", "purchasePrice", "retailPrice", "bonPrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
             data: newProduct
         }
     }

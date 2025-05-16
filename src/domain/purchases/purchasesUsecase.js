@@ -33,7 +33,7 @@ export default class PurchasesUsecase{
                 product : p.product.name,
                 purchasePrice : p.purchasePrice,
                 retailPrice : p.retailPrice,
-                wholesalePrice : p.wholesalePrice,
+                bonPrice : p.bonPrice,
                 quantity : p.quantity,
                 subtotal : p.subtotal
             }
@@ -68,7 +68,7 @@ export default class PurchasesUsecase{
                     stockId : match,
                     purchasePrice : p.purchasePrice,
                     retailPrice : p.retailPrice,
-                    wholesalePrice : p.wholesalePrice,
+                    bonPrice : p.bonPrice,
                     quantity : p.quantity,
                     subtotal : p.subtotal
                 }

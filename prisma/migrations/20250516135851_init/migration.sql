@@ -12,6 +12,7 @@ CREATE TABLE `users` (
     `name` VARCHAR(20) NOT NULL,
     `username` VARCHAR(20) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
+    `role_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `users_username_key`(`username`),
     PRIMARY KEY (`id`)
@@ -34,7 +35,7 @@ CREATE TABLE `products` (
     `name` VARCHAR(40) NOT NULL,
     `purchase_price` INTEGER NOT NULL,
     `retail_price` INTEGER NOT NULL,
-    `wholesale_price` INTEGER NOT NULL,
+    `bon_price` INTEGER NOT NULL,
     `stock` INTEGER NOT NULL,
     `min_stock` INTEGER NOT NULL,
     `barcode` VARCHAR(50) NOT NULL,
@@ -122,16 +123,13 @@ CREATE TABLE `suppliers` (
 -- CreateTable
 CREATE TABLE `staffs` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(15) NOT NULL,
-    `username` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
+    `userId` INTEGER NOT NULL,
     `is_active` ENUM('YES', 'NO') NOT NULL DEFAULT 'YES',
     `level` ENUM('admin', 'kasir') NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `staffs_username_key`(`username`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -224,7 +222,7 @@ CREATE TABLE `purchase_details` (
     `stock_id` INTEGER NOT NULL,
     `purchase_price` DOUBLE NOT NULL,
     `retail_price` DOUBLE NOT NULL,
-    `wholesale_price` DOUBLE NOT NULL,
+    `bon_price` DOUBLE NOT NULL,
     `quantity` INTEGER NOT NULL,
     `subtotal` DOUBLE NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -306,6 +304,9 @@ CREATE TABLE `operational_costs` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `users` ADD CONSTRAINT `users_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `products` ADD CONSTRAINT `products_unit_id_fkey` FOREIGN KEY (`unit_id`) REFERENCES `product_units`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -313,6 +314,9 @@ ALTER TABLE `products` ADD CONSTRAINT `products_category_id_fkey` FOREIGN KEY (`
 
 -- AddForeignKey
 ALTER TABLE `management_details` ADD CONSTRAINT `management_details_management_id_fkey` FOREIGN KEY (`management_id`) REFERENCES `managements`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `staffs` ADD CONSTRAINT `staffs_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `vendor_products` ADD CONSTRAINT `vendor_products_vendor_id_fkey` FOREIGN KEY (`vendor_id`) REFERENCES `vendors`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

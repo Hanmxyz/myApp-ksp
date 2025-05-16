@@ -33,7 +33,7 @@ export default class PurchasesRepository{
                         stockId : p.stockId,
                         purchasePrice : p.purchasePrice,
                         retailPrice : p.retailPrice,
-                        wholesalePrice : p.wholesalePrice,
+                        bonPrice : p.bonPrice,
                         quantity : p.quantity,
                         subtotal : p.subtotal
                     }))
@@ -49,7 +49,7 @@ export default class PurchasesRepository{
                 data : {
                     purchasePrice : p.purchasePrice,
                     retailPrice : p.retailPrice,
-                    wholesalePrice : p.wholesalePrice
+                    bonPrice : p.bonPrice
                 }
             })
         ))

@@ -34,7 +34,7 @@ export default class ProductsRepository {
                 name: productData.name,
                 purchasePrice: productData.purchasePrice,
                 retailPrice: productData.retailPrice,
-                wholesalePrice: productData.wholesalePrice,
+                bonPrice: productData.bonPrice,
                 stock: productData.stock,
                 minStock: productData.minStock,
                 barcode: productData.barcode,
