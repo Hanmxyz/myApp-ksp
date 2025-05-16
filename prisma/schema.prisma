@@ -242,7 +242,7 @@ model Sale {
   details       SaleDetail[]
   credit        PaymentCreditSale[]
   member        Member              @relation(fields: [nip], references: [nip])
-  user          User                @relation(fields: [id], references: [id])
+  user          User                @relation(fields: [userId], references: [id])
 
   @@map("sales")
 }

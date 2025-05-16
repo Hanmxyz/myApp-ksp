@@ -38,10 +38,10 @@ export default class SalesUsecase {
     }
 
     async createSale(data) {
+        console.log(data)
         const updateProducts = []
         const updateStocks = []
-        console.log(updateProducts)
-        console.log(updateStocks)
+
         const getStockOnProductPromise = data.product.map(async (p) => {
             
             return await this.productRepository.getProductStockById(p.productId)
@@ -122,8 +122,9 @@ export default class SalesUsecase {
                 }
             }
         })
-        // console.log(details)
-        // console.log(data)
+        // console.log("updateproduct",updateProducts)
+        // console.log("updatestock",updateStocks)
+        console.log("details: ",details)
         return this.salesRepository.createSale(data, details)
     }
 }
