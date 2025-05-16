@@ -18,6 +18,8 @@ export default class ReportUsecase {
                 paymentMetode: item.paymentMetode,
                 paymentStatus: item.paymentStatus,
                 totalAmount: item.totalAmount,
+                totalPayment: item.totalPayment,
+                change: item.change,
                 details: details
             }
         })
