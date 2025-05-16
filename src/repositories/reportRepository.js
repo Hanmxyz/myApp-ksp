@@ -13,8 +13,8 @@ export default class ReportRepository {
     async getAllSales(queryString) {
         try {
 
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
@@ -50,8 +50,8 @@ export default class ReportRepository {
 
     async getAllPurchases(queryString) {
         try {
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
@@ -89,8 +89,8 @@ export default class ReportRepository {
 
     async getAllCredits(queryString) {
         try {
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
@@ -127,8 +127,8 @@ export default class ReportRepository {
 
     async getAllVendorSales(queryString) {
         try {
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
@@ -163,8 +163,8 @@ export default class ReportRepository {
 
     async getAllOperationalCosts(queryString) {
         try {
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
@@ -184,8 +184,8 @@ export default class ReportRepository {
 
     async getAllPaymentVendors(queryString) {
         try {
-            const startDate = convertWIBtoUTC(queryString.startDate, 0);
-            const endDate = convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
+            const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+            const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
             // const year = queryString.year
             // const month = parseInt(queryString.month) - 1
             // const startDate = new Date(year, month.toString() - 1, 29); // 29 bulan yang diinput
