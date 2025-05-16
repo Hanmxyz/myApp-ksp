@@ -30,29 +30,29 @@ export default class SalesRepository {
                     paymentMetode: data.paymentMetode,
                     totalPayment: parseFloat(30000),
                     change: parseFloat(20000),
-                    userId: 1
-                    // details: {
-                    //     create: details.map(p => ({
-                    //         productId: p.productId,
-                    //         stockId: p.stockId,
-                    //         purchasePrice: parseFloat(p.purchasePrice),
-                    //         salePrice: parseFloat(p.salePrice),
-                    //         quantity: p.quantity,
-                    //         subtotal: parseFloat(p.quantity * p.salePrice)
-                    //     }))
-                    // },
-                    // ...(isCredit && {
-                    //     credit: {
-                    //         create: [
-                    //             {
-                    //                 nip: data.nip,
-                    //                 paymentTotal: parseFloat(data.totalAmount),
-                    //                 paymentDate: new Date(),
-                    //                 status: "cicilan"
-                    //             }
-                    //         ]
-                    //     }
-                    // })
+                    userId: 1,
+                    details: {
+                        create: details.map(p => ({
+                            productId: p.productId,
+                            stockId: p.stockId,
+                            purchasePrice: parseFloat(p.purchasePrice),
+                            salePrice: parseFloat(p.salePrice),
+                            quantity: p.quantity,
+                            subtotal: parseFloat(p.quantity * p.salePrice)
+                        }))
+                    },
+                    ...(isCredit && {
+                        credit: {
+                            create: [
+                                {
+                                    nip: data.nip,
+                                    paymentTotal: parseFloat(data.totalAmount),
+                                    paymentDate: new Date(),
+                                    status: "cicilan"
+                                }
+                            ]
+                        }
+                    })
                 }
             })
             console.log(result)
