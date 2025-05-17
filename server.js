@@ -21,12 +21,14 @@ import reportRouter from "./src/router/reportRouter.js"
 import authRouter from "./src/router/authRouter.js"
 import { PrismaClient } from "@prisma/client"
 import cookieParser from 'cookie-parser';
+import * as env from "dotenv"
 import cors from "cors"
+
+env.config()
 
 const prisma = new PrismaClient();
 export { prisma }
 
-require('dotenv').config()
 
 const app = express()
 
