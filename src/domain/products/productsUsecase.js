@@ -31,7 +31,7 @@ class ProductsUsecase {
         })
 
         const product = updateProduct.map(p => {
-            return {
+            return { 
                 id: p.id,
                 name: p.name,
                 purchasePrice: p.purchasePrice,
@@ -52,6 +52,7 @@ class ProductsUsecase {
     }
     async getAllProducts() {
         const product = await this.getAllP()
+        // console.log(product)
         const productIdStatus = product.map(item => {
             if (item.stock === 0) {
                 return { id: item.id }
@@ -59,11 +60,14 @@ class ProductsUsecase {
         }).filter(item => item !== undefined && item !== null)
         await this.productsRepository.updateProductByGet(productIdStatus)
         const newProduct = await this.getAllP()
-        return {
+        // console.log(newProduct)
+        const result = {
             title: "product",
             header: ["id", "name", "purchasePrice", "retailPrice", "bonPrice", "stock", "minStock", "barcode", "image", "category", "size", "unit", "isActive"],
             data: newProduct
         }
+        // console.log(result)
+        return result
     }
 
     async getAllProductSearch() {

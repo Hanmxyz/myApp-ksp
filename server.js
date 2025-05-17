@@ -18,7 +18,9 @@ import paymentCreditSaleRouter from "./src/router/paymentCreditSaleRouter.js"
 import paymentVendorSaleRouter from "./src/router/paymentVendorSaleRouter.js"
 import operationalCostRouter from "./src/router/operationalCostsRouter.js"
 import reportRouter from "./src/router/reportRouter.js"
+import authRouter from "./src/router/authRouter.js"
 import { PrismaClient } from "@prisma/client"
+import cookieParser from 'cookie-parser';
 import cors from "cors"
 
 const prisma = new PrismaClient();
@@ -26,8 +28,12 @@ export { prisma }
 
 const app = express()
 
+
 app.use(express.json())
+app.use(cookieParser());
 app.use(cors())
+
+app.use("/api", authRouter)
 
 app.use("/api", dashboardRouter)
 

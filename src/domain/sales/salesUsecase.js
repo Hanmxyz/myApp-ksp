@@ -37,7 +37,7 @@ export default class SalesUsecase {
         return newData
     }
 
-    async createSale(data) {
+    async createSale(data, userId) {
         console.log(data)
         const updateProducts = []
         const updateStocks = []
@@ -125,6 +125,6 @@ export default class SalesUsecase {
         // console.log("updateproduct",updateProducts)
         // console.log("updatestock",updateStocks)
         console.log("details: ",details)
-        return this.salesRepository.createSale(data, details)
+        return this.salesRepository.createSale(data, details, userId)
     }
 }

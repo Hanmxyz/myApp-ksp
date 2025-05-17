@@ -15,7 +15,7 @@ export default class SalesRepository {
         })
     }
 
-    async createSale(data, details) {
+    async createSale(data, details, userId) {
 
         try {
             const isCredit = data.paymentMetode === "bon";
@@ -28,9 +28,9 @@ export default class SalesRepository {
                     paymentType: data.paymentType,
                     paymentStatus: data.paymentStatus,
                     paymentMetode: data.paymentMetode,
-                    totalPayment: parseFloat(30000),
-                    change: parseFloat(20000),
-                    userId: 1,
+                    totalPayment: parseFloat(data.totalPayment),
+                    change: parseFloat(data.change),
+                    userId: userId,
                     details: {
                         create: details.map(p => ({
                             productId: p.productId,

@@ -24,8 +24,10 @@ export default class SalesHandler{
 
     async createSale(req, res) {
         try {
+            const userId = req.user.userId
             const data = req.body
-            const sale = await this.salesUsecase.createSale(data)
+            console.log(data)
+            const sale = await this.salesUsecase.createSale(data, userId)
             res.json([{ message : true },
                 { data : sale}]
             )

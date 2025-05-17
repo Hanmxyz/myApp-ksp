@@ -58,7 +58,7 @@ model User {
   password String @db.VarChar(255) @map("password")
   roleId   Int    @map("role_id")
 
-  role    Role    @relation(fields: [roleId], references: [id])
+  role     Role    @relation(fields: [roleId], references: [id])
 
   staffs   Staff[]
   sales    Sale[]
