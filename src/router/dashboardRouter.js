@@ -10,8 +10,8 @@ const dashboardRepository = new DashboardRepository()
 const dashboardUsecase = new DashboardUsecase(dashboardRepository)
 const dashboardHandler = new DashboardHandler(dashboardUsecase)
 
-router.get("/dashboard", (req,res) => { dashboardHandler.getDashboards(req,res)})
-router.get("/dashboard/chart" , (req,res) => { dashboardHandler.getChartDashboard(req,res)})
+router.get("/dashboard", AuthMiddleware,(req,res) => { dashboardHandler.getDashboards(req,res)})
+router.get("/dashboard/chart" , AuthMiddleware, (req,res) => { dashboardHandler.getChartDashboard(req,res)})
 
 
 export default router
