@@ -24,7 +24,7 @@ export default class AuthHandler {
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: isProduction ? "none" : "strict",
-                    domain: isProduction ? process.env.FE_SITE : undefined,
+                    domain: isProduction ? 'kopkargns.com' : undefined,
                     maxAge: 1440 * 60 * 1000
                 })
 
@@ -42,7 +42,7 @@ export default class AuthHandler {
             httpOnly: true,
             secure: isProduction, // set to true if you're using HTTPS
             sameSite: isProduction ? "none" : "strict",
-            domain: isProduction ? process.env.FE_SITE : undefined,
+            domain: isProduction ? 'kopkargns.com' : undefined,
         });
         res.send('Cookie cleared');
     }
