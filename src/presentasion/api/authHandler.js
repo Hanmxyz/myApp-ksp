@@ -18,7 +18,7 @@ export default class AuthHandler {
             const isProduction = process.env.NODE_ENV === "production"
 
             if (username === user.username && passwordValid) {
-                const token = jwt.sign({ username, userId: user.id, role : user.role.name }, 'secret1234', { expiresIn: '24h' })
+                const token = jwt.sign({ userId: user.id, name : user.name ,username,  role : user.role }, 'secret1234', { expiresIn: '24h' })
 
                 res.cookie('token', token, {
                     httpOnly: true,
