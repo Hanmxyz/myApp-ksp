@@ -13,5 +13,6 @@ const authHandler = new AuthHandler(authUsecase)
 router.post( "/login", (req,res) => authHandler.login(req,res))
 router.post( "/logout", (req,res) => authHandler.logout(req,res))
 router.post( "/signup", (req,res) => authHandler.signup(req,res))
+router.get("/session", (req,res) => authHandler.session(req,res))
 
 export default router
