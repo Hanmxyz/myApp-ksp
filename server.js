@@ -26,6 +26,7 @@ import cors from "cors"
 import AuthMiddleware from "./src/presentasion/api/authMiddleware.js"
 
 env.config()
+const allowedOrigins = process.env.FE_SITE.split(",");
 
 const prisma = new PrismaClient();
 export { prisma }
@@ -36,11 +37,18 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser());
-app.use(cors({
-    origin : `https://${process.env.FE_SITE}`,
-    credentials : true
-}))
-
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS: " + origin));
+            }
+        },
+        credentials: true,
+    })
+);
 app.use("/auth", authRouter)
 
 app.use(AuthMiddleware)
