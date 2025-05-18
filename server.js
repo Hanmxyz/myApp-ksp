@@ -26,7 +26,9 @@ import cors from "cors"
 import AuthMiddleware from "./src/presentasion/api/authMiddleware.js"
 
 env.config()
-const allowedOrigins = process.env.FE_SITE.split(",");
+const allowedOrigins = process.env.FE_SITE.split(",").map(origin =>
+    origin.trim().replace(/\/$/, "") // hapus trailing slash
+);
 
 const prisma = new PrismaClient();
 export { prisma }
