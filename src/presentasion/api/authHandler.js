@@ -10,7 +10,7 @@ export default class AuthHandler {
         try {
             const { username, password } = req.body
             const user = await this.authUsecase.login(username)
-            const passwordValid = verifyPassword(password, user.password)
+            const passwordValid = await verifyPassword(password, user.password)
 
             if (username === user.username && passwordValid) {
                 const token = jwt.sign({ username, userId : user.id }, 'secret1234', { expiresIn: '1H' })
@@ -30,7 +30,7 @@ export default class AuthHandler {
     }
 
     async logout(req, res) {
-        res.clearCookie('your_cookie_name', {
+        res.clearCookie('token', {
             httpOnly: true,
             secure: false, // set to true if you're using HTTPS
             sameSite: 'strict' // or 'lax' / 'none' depending on your needs

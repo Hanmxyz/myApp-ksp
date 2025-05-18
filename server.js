@@ -23,6 +23,7 @@ import { PrismaClient } from "@prisma/client"
 import cookieParser from 'cookie-parser';
 import * as env from "dotenv"
 import cors from "cors"
+import AuthMiddleware from "./src/presentasion/api/authMiddleware.js"
 
 env.config()
 
@@ -40,7 +41,9 @@ app.use(cors({
     credentials : true
 }))
 
-app.use("/api", authRouter)
+app.use("/auth", authRouter)
+
+app.use(AuthMiddleware)
 
 app.use("/api", dashboardRouter)
 
