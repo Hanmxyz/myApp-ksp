@@ -28,7 +28,7 @@ export default class AuthHandler {
                     maxAge: 1440 * 60 * 1000
                 })
 
-                res.json({ message: 'Login berhasil', role: user.role.name });
+                res.json({ message: 'Login berhasil', user : { userId: user.id, name : user.name ,username,  role : user.role }});
             }
         } catch (error) {
             res.status(401).json({ message: 'Username atau password salah' });
