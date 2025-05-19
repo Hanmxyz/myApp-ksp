@@ -12,6 +12,7 @@ const dashboardHandler = new DashboardHandler(dashboardUsecase)
 
 router.get("/dashboard", AuthMiddleware,(req,res) => { dashboardHandler.getDashboards(req,res)})
 router.get("/dashboard/chart" , AuthMiddleware, (req,res) => { dashboardHandler.getChartDashboard(req,res)})
+router.get("/dashboard/loyal_member" , AuthMiddleware, (req,res) => { dashboardHandler.getTopLoyalMemberLeader(req,res)})
 
 
 export default router

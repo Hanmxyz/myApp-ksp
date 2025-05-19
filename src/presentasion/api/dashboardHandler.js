@@ -22,4 +22,14 @@ export default class DashboardHandler{
         }
     }
 
+    async getTopLoyalMemberLeader(req,res) {
+        try {
+            const data = await this.dashboardUsecase.getTopLoyalMemberLeader()
+            res.json(data)
+        } catch (error) {
+            res.status(500).json({ message : error.message })
+        }
+
+    }
+
 }

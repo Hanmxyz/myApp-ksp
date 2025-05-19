@@ -69,7 +69,7 @@ export default class ReportUsecase {
                         bank: item.member.bank,
                         accountNumber: item.member.accountNumber,
                         paymentTotal: item.paymentTotal,
-                        status: item.status
+                        status: item.status === "cicilan" ? "piutang" : "lunas"
                     });
                 }
             });

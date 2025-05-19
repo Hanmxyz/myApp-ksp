@@ -90,32 +90,32 @@ export default class DashboardUsecase {
         function getLast7DaysSummary(transactions, currentDateStr = new Date().toISOString().split("T")[0]) {
             const dayNames = ["minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
             const result = [];
-        
+
             const currentDate = new Date(currentDateStr);
-        
+
             for (let i = 6; i >= 0; i--) {
                 const date = new Date(currentDate);
                 date.setDate(currentDate.getDate() - i);
-        
+
                 const formattedDate = date.toISOString().split("T")[0]; // YYYY-MM-DD
                 const dayName = dayNames[date.getDay()];
-        
+
                 const total = transactions
                     .filter(t => {
                         const tDateStr = new Date(t.date).toISOString().split("T")[0];
                         return tDateStr === formattedDate;
                     })
                     .reduce((sum, t) => sum + t.totalAmount, 0);
-        
+
                 result.push({
                     name: dayName,
                     total: total
                 });
             }
-        
+
             return result;
         }
-        
+
         if (queryString.periode === "yearly") {
             return transformData(data)
         } else if (queryString.periode === "weekly") {
@@ -124,5 +124,35 @@ export default class DashboardUsecase {
         } else {
             return { message: "data tidak ditemukan" }
         }
+    }
+
+    async getTopLoyalMemberLeader() {
+        const { sale, vendorSale, member } = await this.dashboardRepository.getTopLoyalMemberLeader()
+        console.log(sale)
+        console.log(member)
+        const data = member.map(item => {
+            const pSale = sale.find(index => index.nip === item.nip)
+            const vSale = vendorSale.find(i => i.nip === item.nip)
+            const totalTx = (pSale?._count?.id || 0) + (vSale?._count?.id || 0)
+            const totalAmount = (pSale?._sum?.totalAmount || 0) + (vSale?._sum?.totalAmount || 0)
+
+            if (pSale || vSale ) {
+                return {
+                    nip: item.nip,
+                    name: item.name,
+                    allTx: totalTx,
+                    allAmount: totalAmount
+                }
+            } else {
+                return {
+                    nip: item.nip,
+                    name: item.name,
+                    allTx: 0,
+                    allAmount: 0
+                }
+            }
+        }).filter( item => item.nip !== "0000000000" ).sort((a,b) => b.allTx - a.allTx)
+
+        return data
     }
 }

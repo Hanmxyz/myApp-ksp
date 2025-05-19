@@ -13,16 +13,16 @@ export default class DashboardRepository {
 
     getYearly() {
         const start = new Date();
-        start.setMonth(0); 
-        start.setDate(1);  
-        start.setHours(0, 0, 0, 0); 
+        start.setMonth(0);
+        start.setDate(1);
+        start.setHours(0, 0, 0, 0);
 
         const end = new Date();
-        end.setMonth(11); 
+        end.setMonth(11);
         end.setDate(31);
-        end.setHours(23, 59, 59, 999); 
+        end.setHours(23, 59, 59, 999);
 
-        return { start , end }
+        return { start, end }
     }
 
     async getSaleDashboard() {
@@ -165,84 +165,117 @@ export default class DashboardRepository {
         const year = new Date().getFullYear()
         const { start, end } = this.getYearly(year)
         try {
-            if(type === "purchase") {
+            if (type === "purchase") {
                 const allRecordsOfYear = await prisma.purchase.findMany({
                     where: {
-                      purchaseDate : {
-                        gte: start,
-                        lte: end,
-                      },
+                        purchaseDate: {
+                            gte: start,
+                            lte: end,
+                        },
                     },
-                    select : {
+                    select: {
                         purchaseDate: true,
-                        totalAmount : true
-                    }, 
-                    orderBy: {
-                      purchaseDate: 'asc', // Optional: Order by date for easier processing
+                        totalAmount: true
                     },
-                  });
-                return allRecordsOfYear.map(item => { return { date : item.purchaseDate, totalAmount : item.totalAmount}})
+                    orderBy: {
+                        purchaseDate: 'asc', // Optional: Order by date for easier processing
+                    },
+                });
+                return allRecordsOfYear.map(item => { return { date: item.purchaseDate, totalAmount: item.totalAmount } })
             } else if (type === "sale") {
                 const allRecordsOfYear = await prisma.sale.findMany({
                     where: {
-                      saleDate : {
-                        gte: start,
-                        lte: end,
-                      },
+                        saleDate: {
+                            gte: start,
+                            lte: end,
+                        },
                     },
-                    select : {
-                        saleDate : true,
-                        totalAmount : true
-                    }, 
+                    select: {
+                        saleDate: true,
+                        totalAmount: true
+                    },
                     orderBy: {
-                      saleDate : 'asc', // Optional: Order by date for easier processing
+                        saleDate: 'asc', // Optional: Order by date for easier processing
                     },
-                  });
-                return allRecordsOfYear.map( item => { return { date : item.saleDate, totalAmount : item.totalAmount}})
+                });
+                return allRecordsOfYear.map(item => { return { date: item.saleDate, totalAmount: item.totalAmount } })
             } else if (type === "profitSale") {
                 const allProfitSales = await prisma.saleDetail.findMany({
-                    where : {
-                        createdAt : {
-                            gte : start,
-                            lte : end
+                    where: {
+                        createdAt: {
+                            gte: start,
+                            lte: end
                         }
                     },
                     select: {
-                        createdAt : true,
+                        createdAt: true,
                         purchasePrice: true,
                         salePrice: true,
                         quantity: true
-                    }, orderBy : {
-                        createdAt : "asc"
+                    }, orderBy: {
+                        createdAt: "asc"
                     }
                 })
-                const allRecordsOfYear = allProfitSales.map( item => {
+                const allRecordsOfYear = allProfitSales.map(item => {
                     const totalAmount = ((item.salePrice * item.quantity) - (item.purchasePrice * item.quantity))
-                    return { date : item.createdAt , totalAmount : totalAmount}
+                    return { date: item.createdAt, totalAmount: totalAmount }
                 })
                 return allRecordsOfYear
             } else if (type === "profitVendorSale") {
                 const allRecordsOfYear = await prisma.vendorSale.findMany({
                     where: {
-                      transactionDate : {
-                        gte: start,
-                        lte: end,
-                      },
+                        transactionDate: {
+                            gte: start,
+                            lte: end,
+                        },
                     },
-                    select : {
-                        transactionDate : true,
-                        totalAmount : true
-                    }, 
+                    select: {
+                        transactionDate: true,
+                        totalAmount: true
+                    },
                     orderBy: {
-                      transactionDate : 'asc', // Optional: Order by date for easier processing
+                        transactionDate: 'asc', // Optional: Order by date for easier processing
                     },
-                  });
-                return allRecordsOfYear.map( item => { return { date : item.transactionDate, totalAmount : item.totalAmount }})
-            } else return { message : "data tidak ditemukan"}
+                });
+                return allRecordsOfYear.map(item => { return { date: item.transactionDate, totalAmount: item.totalAmount } })
+            } else return { message: "data tidak ditemukan" }
         } catch (error) {
             throw error
         }
     }
 
-    async
+    async getTopLoyalMemberLeader() {
+        try {
+            const sale = await prisma.sale.groupBy({
+                by: ['nip'],
+                _sum: {
+                    totalAmount: true
+                },
+                _count: {
+                    id: true
+                }
+            })
+
+            const vendorSale = await prisma.vendorSale.groupBy({
+                by: ['nip'],
+                _sum: {
+                    totalAmount: true
+                },
+                _count: {
+                    id: true
+                }
+            })
+
+            const member = await prisma.member.findMany({
+                select: {
+                    nip: true,
+                    name: true
+                }
+            })
+
+            return { sale, vendorSale, member}
+        } catch (error) {
+            throw error
+        }
+    }
 }
