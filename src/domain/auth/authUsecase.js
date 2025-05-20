@@ -13,7 +13,6 @@ export default class AuthUsecase{
 
     async signup(data) {
         const result = await this.authRepository.signup(data)
-        console.log(result)
         return result
     }
 }

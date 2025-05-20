@@ -15,7 +15,6 @@ export default class DashboardUsecase {
         const { allOpcost, todayOpcost } = await this.dashboardRepository.getOpcostDashboard()
         const allProducts = await this.ProductsUsecase.getAllProducts()
 
-        console.log(allProfitSales, todayProfitSales)
         let allPs = 0
         let todayPs = 0
         for (const item of allProfitSales) {
@@ -119,7 +118,6 @@ export default class DashboardUsecase {
         if (queryString.periode === "yearly") {
             return transformData(data)
         } else if (queryString.periode === "weekly") {
-            console.log(data)
             return getLast7DaysSummary(data)
         } else {
             return { message: "data tidak ditemukan" }
@@ -128,8 +126,6 @@ export default class DashboardUsecase {
 
     async getTopLoyalMemberLeader() {
         const { sale, vendorSale, member } = await this.dashboardRepository.getTopLoyalMemberLeader()
-        console.log(sale)
-        console.log(member)
         const data = member.map(item => {
             const pSale = sale.find(index => index.nip === item.nip)
             const vSale = vendorSale.find(i => i.nip === item.nip)

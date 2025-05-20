@@ -38,11 +38,11 @@ export default class VendorSalesUsecase {
 
        try {
         for (const item of newData.product) {
-            console.log(item)
+            // console.log(item)
             const checkVendor = await this.vendorProductsRepository.getVendorProductById(item.vendorProductId)
-            console.log(checkVendor)
+            // console.log(checkVendor)
             const checkPaymentVendor = await this.paymentVendorSaleRepository.getVendorPayment(checkVendor.vendorId)
-            console.log(checkPaymentVendor)
+            // console.log(checkPaymentVendor)
             if (!checkPaymentVendor) {
                 const data = {
                     vendorId: checkVendor.vendorId,

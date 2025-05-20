@@ -1,3 +1,5 @@
+import { toWIB } from "../../lib/convertDate.js"
+
 export default class ReportUsecase {
     constructor(reportRepository) {
         this.reportRepository = reportRepository
@@ -9,10 +11,9 @@ export default class ReportUsecase {
 
         const data = sale.map(item => {
             const details = saleDetails.filter(detail => detail.saleId === item.id)
-            console.log(details)
             return {
                 id: item.id,
-                saleDate: item.saleDate,
+                saleDate: toWIB(item.saleDate),
                 nip: item.nip,
                 name: item.member.name,
                 paymentMetode: item.paymentMetode,
@@ -35,7 +36,7 @@ export default class ReportUsecase {
             const details = purchaseDetails.filter(detail => detail.purchaseId === item.id)
             return {
                 id: item.id,
-                purchaseDate: item.purchaseDate,
+                purchaseDate: toWIB(item.purchaseDate),
                 supplier: item.supplier.name,
                 totalAmount: item.totalAmount,
                 isPaid: item.isPaid,
@@ -84,10 +85,9 @@ export default class ReportUsecase {
       const { vendorSale , vendorSaleDetail } = await this.reportRepository.getAllVendorSales(queryString)
       const data = vendorSale.map(item => {
         const details = vendorSaleDetail.filter(detail => detail.vendorSaleId === item.id)
-        console.log(details)
         return {
             id: item.id,
-            saleDate: item.saleDate,
+            saleDate: toWIB(item.saleDate),
             nip: item.nip,
             name: item.member.name,
             paymentMetode: item.paymentMetode,
@@ -112,7 +112,7 @@ export default class ReportUsecase {
             const name = vendor.find( i => i.id === item.vendorId)
             return {
                 id : item.id,
-                date : item.paymentDate,
+                date : toWIB(item.paymentDate),
                 name : name.name,
                 total : item.paymentTotal,
                 status : item.status

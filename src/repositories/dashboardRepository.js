@@ -3,12 +3,21 @@ import { prisma } from "../../server.js"
 export default class DashboardRepository {
 
     getDay() {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const now = new Date();
+
+        // Ubah ke WIB (UTC+7)
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const wibOffset = 7 * 60 * 60000; // 7 jam dalam milidetik
+        const wibNow = new Date(utc + wibOffset);
+
+        // Set jam ke 00:00:00 di WIB
+        wibNow.setHours(0, 0, 0, 0);
+        const today = new Date(wibNow);
+
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
-        return { today, tomorrow }
+        return { today, tomorrow };
     }
 
     getYearly() {
@@ -273,7 +282,7 @@ export default class DashboardRepository {
                 }
             })
 
-            return { sale, vendorSale, member}
+            return { sale, vendorSale, member }
         } catch (error) {
             throw error
         }

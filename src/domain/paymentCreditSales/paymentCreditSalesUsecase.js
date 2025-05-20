@@ -86,7 +86,6 @@ export default class PaymentCreditSalesUsecase{
     }
 
     async updateCreditMemberByNipPerMonth(data, queryString) {
-        console.log(data)
         return this.paymentCreditSaleRepository.updateCreditMemberByNipPerMonth(data,queryString)
     }
 }

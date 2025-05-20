@@ -38,7 +38,7 @@ export default class SalesUsecase {
     }
 
     async createSale(data, userId) {
-        console.log(data)
+        // console.log(data)
         const updateProducts = []
         const updateStocks = []
 
@@ -47,12 +47,12 @@ export default class SalesUsecase {
             return await this.productRepository.getProductStockById(p.productId)
         })
         const getStockOnProduct = await Promise.all(getStockOnProductPromise)
-        console.log(getStockOnProductPromise)
+        // console.log(getStockOnProductPromise)
         const getStockOnStockPromise = data.product.map(async (p) => {
             return await this.stockRepository.getStocksByProductId(p.productId)
         })
         const getStockOnStock = (await Promise.all(getStockOnStockPromise)).flat()
-        console.log(getStockOnStock)
+        // console.log(getStockOnStock)
         
 
         
@@ -124,7 +124,7 @@ export default class SalesUsecase {
         })
         // console.log("updateproduct",updateProducts)
         // console.log("updatestock",updateStocks)
-        console.log("details: ",details)
+        // console.log("details: ",details)
         return this.salesRepository.createSale(data, details, userId)
     }
 }

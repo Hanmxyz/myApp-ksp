@@ -7,10 +7,8 @@ export default class PaymentVendorSaleUsecase {
     }
 
     async getPaymentVendorSaleWithDetail(vendorId) {
-        console.log(vendorId)
         const vendor = await this.vendorsRepository.getVendorById(vendorId)
         const paymentVendor = await this.paymentVendorSaleRepository.getVendorPayment(vendorId)
-        console.log(paymentVendor)
         const vendorProductSales = await this.paymentVendorSaleRepository.getDetailVendorSale()
 
 
