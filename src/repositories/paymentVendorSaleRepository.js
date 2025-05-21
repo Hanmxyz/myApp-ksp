@@ -27,8 +27,6 @@ export default class PaymentVendorSaleRepository {
         today.setHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-        // console.log(today)
-        // console.log(tomorrow)
         return await prisma.paymentVendorSale.findFirst({
             where: {
                 vendorId : Number(vendorId),

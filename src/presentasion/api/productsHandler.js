@@ -6,7 +6,6 @@ class ProductsHandler {
     async getAllProducts(req,res) {
         try {
             const data = await this.ProductsUsecase.getAllProducts();
-            // console.log(data)
             res.json(data);
         } catch (err) {
             res.status(500).json({ message: err.message });

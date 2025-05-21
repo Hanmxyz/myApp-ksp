@@ -18,7 +18,7 @@ export default class VendorSalesUsecase {
         const date = new Date()
         const isoString = date.toISOString()
         const dateNow = isoString.slice(0,10)
-        // console.log(dateNow)
+       
         
         const profitKsp = data.product.reduce((acc, curr) => acc + (curr.profitKsp * curr.quantity), 0)
         const newData = {
@@ -38,11 +38,11 @@ export default class VendorSalesUsecase {
 
        try {
         for (const item of newData.product) {
-            // console.log(item)
+            
             const checkVendor = await this.vendorProductsRepository.getVendorProductById(item.vendorProductId)
-            // console.log(checkVendor)
+            
             const checkPaymentVendor = await this.paymentVendorSaleRepository.getVendorPayment(checkVendor.vendorId)
-            // console.log(checkPaymentVendor)
+        
             if (!checkPaymentVendor) {
                 const data = {
                     vendorId: checkVendor.vendorId,

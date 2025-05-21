@@ -98,7 +98,6 @@ export default class PaymentCreditSalesRepository {
 
         try {
             const updatePromises = data.map(async (item) => {
-                console.log(item)
                 return prisma.paymentCreditSale.updateMany({
                     where: {
                         nip: String(item.nip),

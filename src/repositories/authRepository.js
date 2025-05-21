@@ -26,19 +26,16 @@ export default class AuthRepository {
 
     async signup(data) {
         try {
-            console.log(data.username)
             const existingUser = await prisma.user.findUnique({
                 where: {
                     username: String(data.username)
                 }
             })
-            console.log(existingUser)
             if (existingUser !== null) {
                 throw new Error("username sudah digunakan")
             }
 
             const hashedPassword = await hashPassword(data.password)
-            console.log(hashPassword)
 
             return await prisma.user.create({
                 data: {

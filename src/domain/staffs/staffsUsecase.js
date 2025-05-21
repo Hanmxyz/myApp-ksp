@@ -43,12 +43,10 @@ export default class StaffsUsecase {
                 isActive: data.isActive.toUpperCase()
             }
 
-            // console.log(newData)
 
 
             return await this.staffsRepository.createStaff(newData)
         } catch (error) {
-            // console.log(error)
             throw new Error('failed : ', error.message)
         }
     }

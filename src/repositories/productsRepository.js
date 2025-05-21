@@ -24,6 +24,7 @@ export default class ProductsRepository {
             select: {
                 id: true,
                 stock: true,
+                name: true,
                 updatedAt: true
             }
         })

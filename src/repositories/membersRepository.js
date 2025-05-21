@@ -27,7 +27,6 @@ export default class MembersRepository {
         })
     }
     async updateMember(id, data) {
-        console.log(data)
         return await prisma.member.update({
             where : { nip : String(id) },
             data : {

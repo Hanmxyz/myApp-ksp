@@ -100,14 +100,11 @@ export default class PaymentCreditVendorSalesUsecase{
 
         function updateTotalandDistribute(data, nominal) {
             const sortedData = data.sort((a,b) => a.id - b.id);
-            // console.log(sortedData)
             let remainingAmount = nominal
-            // console.log(remainingAmount)
             const updatedCredit = []
 
             for (const item of sortedData) {
                 const amountToReduce = Math.min(remainingAmount, item.paymentTotal)
-                // console.log(amountToReduce)
                 const newPaymentTotal = Math.max(0, item.paymentTotal - amountToReduce)
                 updatedCredit.push({id: item.id, paymentTotal : newPaymentTotal, status : (newPaymentTotal === 0 ? "lunas" : "cicilan")})
                 remainingAmount -= amountToReduce;
@@ -119,7 +116,6 @@ export default class PaymentCreditVendorSalesUsecase{
         }
 
         const result = updateTotalandDistribute(data, nominal)
-        // console.log(result)
         return await this.paymentCreditVendorSaleRepository.updateCreditMember(result)
     }
 

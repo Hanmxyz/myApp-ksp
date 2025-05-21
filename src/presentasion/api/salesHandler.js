@@ -26,7 +26,6 @@ export default class SalesHandler{
         try {
             const userId = req.user.userId
             const data = req.body
-            console.log(data)
             const sale = await this.salesUsecase.createSale(data, userId)
             res.json([{ message : true },
                 { data : sale}]

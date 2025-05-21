@@ -35,7 +35,6 @@ export default class MembersHandler{
         try {
             const id = req.params.id
             const data = req.body
-            console.log(data)
             await this.membersUsecase.updateMember(id, data)
             res.json({message : true})
         } catch (error) {
