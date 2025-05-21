@@ -38,7 +38,7 @@ export default class SalesUsecase {
     }
 
     async createSale(data, userId) {
-        // console.log(data)
+        console.log(data)
         const updateProducts = []
         const updateStocks = []
 
