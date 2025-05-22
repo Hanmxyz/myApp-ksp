@@ -57,7 +57,7 @@ export default class SalesUsecase {
 
 
 
-            if (firstResult > 0) {
+            if (firstResult >= 0) {
                 updateProducts.push({ id: firstOption.id, stock: firstResult })
             } else {
                 function updateStockAndDistribute(data, quantity, productId) {
