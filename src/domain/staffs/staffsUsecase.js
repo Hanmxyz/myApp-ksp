@@ -31,24 +31,20 @@ export default class StaffsUsecase {
     }
 
     async createStaff(data) {
-
-        try {
-            const hashedPassword = await hashPassword(data.password)
-            const newData = {
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                username: data.username,
-                password: hashedPassword,
-                level : data.level,
-                isActive: data.isActive.toUpperCase()
-            }
-
-
-
-            return await this.staffsRepository.createStaff(newData)
-        } catch (error) {
-            throw new Error('failed : ', error.message)
+        const password = await hashPassword(data.password)
+        const priData = {
+            phoneNumber : data.phoneNumber,
+            isActive      : data.isActive,
         }
+
+        const secData = {
+            name : data.name,
+            username : data.username,
+            password : password,
+            roleId : data.roleId
+        }
+
+        return await this.staffsRepository.createStaff(priData,secData)
     }
 
     async updateStaff(id, data) {

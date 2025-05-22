@@ -53,6 +53,7 @@ export default class SalesUsecase {
 
         for (const product of data.product) {
             const firstOption = await getStockOnProduct.find(item => item.id === product.productId)
+            console.log(firstOption)
             const firstResult = firstOption.stock - product.quantity
 
 
@@ -91,6 +92,9 @@ export default class SalesUsecase {
             }
         }
 
+        console.log(updateProducts)
+        console.log(updateStocks)
+
         // //update stock on stock
         // const updateStockPromise = (updateStocks.flat()).map(async (p) => {
         //     await this.stockRepository.updateStockAfterSale(p.id, p.stock)
@@ -104,7 +108,7 @@ export default class SalesUsecase {
 
         const details = data.product.map(p => {
             const stockIdByProduct = updateProducts.find(item => item.id === p.productId)
-            if (stockIdByProduct.stock > 0) {
+            if (stockIdByProduct.stock >= 0) {
                 return {
                     productId: p.productId,
                     stockId: 0,
