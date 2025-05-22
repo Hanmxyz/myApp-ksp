@@ -75,7 +75,22 @@ class ProductsUsecase {
         return data
     }
     async getProductById(id) {
-        return await this.productsRepository.getProductById(id);
+        const data =  await this.productsRepository.getProductById(id);
+        return { 
+                id: data.id,
+                name: data.name,
+                purchasePrice: data.purchasePrice,
+                retailPrice: data.retailPrice,
+                bonPrice: data.bonPrice,
+                stock: data.stock,
+                minStock: data.minStock,
+                barcode: data.barcode,
+                image: data.image,
+                category: data.category.name,
+                size: data.size,
+                unit: data.unit.name,
+                isActive: data.isActive
+            }
     }
 
     async createProduct(product) {

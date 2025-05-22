@@ -14,7 +14,11 @@ export default class ProductsRepository {
     };
     async getProductById(id) {
         return await prisma.product.findUnique({
-            where: { id: Number(id) }
+            where: { id: Number(id) },
+            include: {
+                category : true,
+                unit: true
+            }
         })
     }
 
