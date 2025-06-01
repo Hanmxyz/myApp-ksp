@@ -131,8 +131,21 @@ model Member {
   vendorSale      VendorSale[]
   creditSales     PaymentCreditSale[]
   vendorCreditSales PaymentCreditVendorSale[]
+  userMobiles     UserMobile[]
 
   @@map("members")
+}
+
+
+model UserMobile {
+  id              Int                @id @default(autoincrement()) @map("id")
+  nip             String             @db.VarChar(20) @map("nip")             
+  username        String             @unique @db.VarChar(20) @map("username")
+  password        String             @db.VarChar(255) @map("password")
+
+  member          Member             @relation(fields: [nip], references: [nip])
+
+  @@map("user_mobiles")
 }
 
 model Management {

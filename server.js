@@ -19,6 +19,7 @@ import paymentVendorSaleRouter from "./src/router/paymentVendorSaleRouter.js"
 import operationalCostRouter from "./src/router/operationalCostsRouter.js"
 import reportRouter from "./src/router/reportRouter.js"
 import authRouter from "./src/router/authRouter.js"
+import notifRouter from "./src/router/notifRouter.js"
 import { PrismaClient } from "@prisma/client"
 import cookieParser from 'cookie-parser';
 import * as env from "dotenv"
@@ -78,6 +79,7 @@ app.use("/api", paymentVendorSaleRouter)
 app.use("/api", operationalCostRouter)
 
 app.use("/api", reportRouter)
+app.use("/api", notifRouter)
 
 app.listen(3000, () => {
     console.log("http://localhost:3000/")

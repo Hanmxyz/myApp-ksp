@@ -47,7 +47,6 @@ export default class PurchasesRepository{
                     id : p.productId
                 },
                 data : {
-                    purchasePrice : p.purchasePrice,
                     retailPrice : p.retailPrice,
                     bonPrice : p.bonPrice
                 }

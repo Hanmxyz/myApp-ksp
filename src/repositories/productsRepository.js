@@ -2,7 +2,11 @@ import { prisma } from "../../server.js"
 
 export default class ProductsRepository {
     async getAllProducts() {
-        const stock = await prisma.stock.findMany()
+        const stock = await prisma.stock.findMany({
+            orderBy: {
+                entryDate: 'asc'
+            }
+        })
         const product = await prisma.product.findMany({
             include: {
                 category: true,
@@ -16,7 +20,7 @@ export default class ProductsRepository {
         return await prisma.product.findUnique({
             where: { id: Number(id) },
             include: {
-                category : true,
+                category: true,
                 unit: true
             }
         })

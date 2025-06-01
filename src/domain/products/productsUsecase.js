@@ -14,18 +14,24 @@ class ProductsUsecase {
         let result = stock.reduce((acc, curr) => {
             let existing = acc.find(item => item.productId === curr.productId)
             if (existing) {
+                if(existing.stock === 0 ){
+                    existing.purchasePrice = curr.purchasePrice
+                }
                 existing.stock += curr.stock
-                existing.purchasePrice = Math.max(existing.purchasePrice, curr.purchasePrice);
             } else {
                 acc.push({ productId: curr.productId, purchasePrice: curr.purchasePrice, stock: curr.stock })
             }
             return acc
         }, [])
         const updateProduct = data.product.map(product => {
-
+            
             const update = result.find(u => u.productId === product.id);
             if (update) {
-                return { ...product, purchasePrice: update.purchasePrice, stock: update.stock + product.stock };
+                if(product.stock === 0) {
+                    return { ...product, purchasePrice: update.purchasePrice, stock: update.stock + product.stock };
+                } else {
+                    return { ...product, purchasePrice: product.purchasePrice, stock: update.stock + product.stock };
+                }
             }
             return product;
         })

@@ -9,17 +9,15 @@ export default class StaffsUsecase {
         const staff = data.map( p => {
             return {
                 id : p.id,
-                name : p.name,
+                name : p.user.name,
                 phoneNumber : p.phoneNumber,
-                username : p.username,
-                password : p.password,
+                username : p.user.username,
+                password : p.user.password,
                 isActive : p.isActive ,
-                level : p.level
+                role : p.user.role.name
             }
         })
         const newData = {
-            title : "staff",
-            header :["id","name","phoneNumber", "username", "password", "isActive", "level"],
             data : staff
         }
 
@@ -27,7 +25,17 @@ export default class StaffsUsecase {
     }
 
     async getStaffById(id) {
-        return await this.staffsRepository.getStaffById(id)
+        const data = await this.staffsRepository.getStaffById(id)
+        
+         return {
+                id : data.id,
+                name : data.user.name,
+                phoneNumber : data.phoneNumber,
+                username : data.user.username,
+                password : data.user.password,
+                isActive : data.isActive ,
+                role : data.user.role.name
+            }
     }
 
     async createStaff(data) {

@@ -2,7 +2,15 @@ import { prisma } from "../../server.js"
 
 export default class StaffsRepository {
     async getAllstaffs() {
-        return await prisma.staff.findMany()
+        return await prisma.staff.findMany({
+            include: {
+                user: {
+                    include: {
+                        role: true
+                    }
+                }
+            }
+        })
     }
 
     async getStaffById(id) {
@@ -50,23 +58,39 @@ export default class StaffsRepository {
     }
 
     async updateStaff(id, data) {
-        return await prisma.staff.update({
-            where: { id: Number(id) },
-            data: {
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                username: data.username,
-                password: data.password,
-                isActive: data.isActive,
-                level: data.level,
-                updatedAt: new Date()
-            }
-        })
+        const role = await prisma.role.findUnique({ where: { id: Number(data.roleId) } });
+        if (!role) {
+            throw new Error('Role not found');
+        }
+        const username = await prisma.user.findUnique({ where: { username: data.username } });
+        if (username) {
+            throw new Error('username sudah ada');
+        }
+            const staff = await prisma.staff.update({
+                where: { id: Number(id) },
+                data: {
+                    phoneNumber : data.phoneNumbers,
+                    isActive : data.isActive,
+                    user: {
+                        update: {
+                            name : data.name,
+                            username: data.username,
+                            password: data.password,
+                            roleId: data.roleId
+                        }
+                    }
+                },
+                include: {
+                    user: true
+                }
+            });
     }
 
     async deleteStaff(id) {
-        return await prisma.staff.delete({
-            where: { id: Number(id) }
-        })
+        const staff = await prisma.staff.findUnique({ where: { id: Number(id) }, include: { user: true } });
+        if (!staff) throw new Error('Staff not found');
+
+        await prisma.staff.delete({ where: { id: Number(id) } });
+        await prisma.user.delete({ where: { id: Number(staff.userId) } });
     }
 }
