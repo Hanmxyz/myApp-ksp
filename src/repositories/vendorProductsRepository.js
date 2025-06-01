@@ -52,7 +52,7 @@ export default class VendorProductsRepository{
                 name : data.name,
                 categoryId : data.categoryId,
                 sellPrice : data.sellPrice,
-                profitPercent : data.profitPercent,
+                profitKsp : data.profitKsp,
                 entryDate : data.entryDate,
                 updatedAt : new Date()
             }

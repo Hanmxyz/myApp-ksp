@@ -80,6 +80,17 @@ CREATE TABLE `members` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `user_mobiles` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nip` VARCHAR(20) NOT NULL,
+    `username` VARCHAR(20) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+
+    UNIQUE INDEX `user_mobiles_username_key`(`username`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `managements` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
@@ -126,7 +137,6 @@ CREATE TABLE `staffs` (
     `phone_number` VARCHAR(15) NOT NULL,
     `userId` INTEGER NOT NULL,
     `is_active` ENUM('YES', 'NO') NOT NULL DEFAULT 'YES',
-    `level` ENUM('admin', 'kasir') NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NULL,
 
@@ -311,6 +321,9 @@ ALTER TABLE `products` ADD CONSTRAINT `products_unit_id_fkey` FOREIGN KEY (`unit
 
 -- AddForeignKey
 ALTER TABLE `products` ADD CONSTRAINT `products_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `user_mobiles` ADD CONSTRAINT `user_mobiles_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `management_details` ADD CONSTRAINT `management_details_management_id_fkey` FOREIGN KEY (`management_id`) REFERENCES `managements`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
