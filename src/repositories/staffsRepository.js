@@ -63,27 +63,27 @@ export default class StaffsRepository {
             throw new Error('Role not found');
         }
         const username = await prisma.user.findUnique({ where: { username: data.username } });
-        if (username) {
+        if (username && username.id !== id) {
             throw new Error('username sudah ada');
         }
-            const staff = await prisma.staff.update({
-                where: { id: Number(id) },
-                data: {
-                    phoneNumber : data.phoneNumbers,
-                    isActive : data.isActive,
-                    user: {
-                        update: {
-                            name : data.name,
-                            username: data.username,
-                            password: data.password,
-                            roleId: data.roleId
-                        }
+        const staff = await prisma.staff.update({
+            where: { id: Number(id) },
+            data: {
+                phoneNumber: data.phoneNumbers,
+                isActive: data.isActive,
+                user: {
+                    update: {
+                        name: data.name,
+                        username: data.username,
+                        password: data.password,
+                        roleId: data.roleId
                     }
-                },
-                include: {
-                    user: true
                 }
-            });
+            },
+            include: {
+                user: true
+            }
+        });
     }
 
     async deleteStaff(id) {
