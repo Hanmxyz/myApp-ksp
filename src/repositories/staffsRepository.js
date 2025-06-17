@@ -63,7 +63,7 @@ export default class StaffsRepository {
             throw new Error('Role not found');
         }
         const username = await prisma.user.findUnique({ where: { username: data.username } });
-        if (username && username.id !== id) {
+        if (username && username.username !== data.username) {
             throw new Error('username sudah ada');
         }
         const staff = await prisma.staff.update({

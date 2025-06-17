@@ -56,7 +56,19 @@ export default class StaffsUsecase {
     }
 
     async updateStaff(id, data) {
-        return await this.staffsRepository.updateStaff(id, data)
+
+        const password = await hashPassword(data.password)
+        const newData = {
+            phoneNumber : data.phoneNumber,
+            name : data.name,
+            isActive : data.isActive,
+            username : data.username,
+            password : password,
+            roleId : data.roleId
+
+        }
+
+        return await this.staffsRepository.updateStaff(id, newData)
     }
 
     async deleteStaff(id) {
