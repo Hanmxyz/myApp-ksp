@@ -46,12 +46,12 @@ export default class VendorSalesUsecase {
             if (!checkPaymentVendor) {
                 const data = {
                     vendorId: checkVendor.vendorId,
-                    paymentTotal: checkVendor.sellPrice * item.quantity
+                    paymentTotal: (checkVendor.sellPrice - checkVendor.profitKsp) * item.quantity
                 }
         
                 await this.paymentVendorSaleRepository.createPaymentVendorSale(data)
             } else {
-                const paymentTotal = checkPaymentVendor.paymentTotal + (checkVendor.sellPrice * item.quantity)
+                const paymentTotal = checkPaymentVendor.paymentTotal + ((checkVendor.sellPrice - checkVendor.profitKsp) * item.quantity)
                 await this.paymentVendorSaleRepository.updateTotalVendorSale(checkVendor.vendorId, paymentTotal)
             }
         }

@@ -25,8 +25,14 @@ export default class ReportUsecase {
             }
         })
 
-        return data
+        console.log(saleDetails)
+        const newData = {
+            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            profit : await saleDetails.reduce((cur, item) => cur += parseInt(item.salePrice - item.purchasePrice), 0),
+            data : data
+        }
 
+        return newData
     }
 
     async getAllPurchases(queryString) {
@@ -44,7 +50,12 @@ export default class ReportUsecase {
             }
         })
 
-        return data
+        const newData = {
+            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            data : data
+        }
+
+        return newData
     }
 
     async getAllCredits(queryString) {
@@ -98,7 +109,13 @@ export default class ReportUsecase {
         }
     })
 
-    return data
+    const newData = {
+            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            profit : await data.reduce((cur, item) => cur += parseInt(item.profitKsp), 0),
+            data : data
+        }
+
+        return newData
     }
 
     async getAllOperationalCosts(queryString) {

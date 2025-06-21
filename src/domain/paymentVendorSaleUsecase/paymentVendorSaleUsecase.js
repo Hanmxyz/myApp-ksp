@@ -26,9 +26,11 @@ export default class PaymentVendorSaleUsecase {
                         vendorProductId: vendorProduct.id,
                         name: vendorProduct.name,
                         category: vendorProduct.categoryId,
-                        sellPrice: vendorProduct.sellPrice,
+                        sellPrice: (vendorProduct.sellPrice - vendorProduct.profitKsp),
+                        profit: vendorProduct.profitKsp,
                         quantity: item.quantity,
-                        subtotal: vendorProduct.sellPrice * item.quantity
+                        subtotal: (vendorProduct.sellPrice - vendorProduct.profitKsp) * item.quantity,
+                        subTotalProfit: vendorProduct.profitKsp * item.quantity
                     });
                 }
 
@@ -39,6 +41,7 @@ export default class PaymentVendorSaleUsecase {
                 vendorId: paymentVendor.vendorId,
                 name: vendor.name,
                 paymentTotal: paymentVendor.paymentTotal,
+                profit: await result.reduce((acc, item) =>  acc += parseInt(item.subTotalProfit),0),
                 status: paymentVendor.status,
                 products: result
             }
