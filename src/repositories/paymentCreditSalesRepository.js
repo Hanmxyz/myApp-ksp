@@ -38,7 +38,7 @@ export default class PaymentCreditSalesRepository {
     }
 
     async getDetailTransactionCreditMemberPerMonth(nip, queryString) {
-        
+
         try {
             const year = queryString.year
             const month = parseInt(queryString.month) - 1
@@ -46,7 +46,7 @@ export default class PaymentCreditSalesRepository {
             const endDate = new Date(year, month.toString(), 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
             const matchSale = await prisma.paymentCreditSale.findMany({
                 where: {
-                    nip : String(nip),
+                    nip: String(nip),
                     paymentDate: {
                         gte: startDate,
                         lte: endDate,
@@ -63,13 +63,13 @@ export default class PaymentCreditSalesRepository {
                             lte: endDate,
                         },
                     },
-                    include : {
-                        product : true
+                    include: {
+                        product: true
                     }
                 })
             })
             const details = await Promise.all(updatePromises)
-            return { matchSale , details}
+            return { matchSale, details }
         } catch (error) {
             throw error
         }
@@ -91,10 +91,8 @@ export default class PaymentCreditSalesRepository {
     }
 
     async updateCreditMemberByNipPerMonth(data, queryString) {
-        const year = queryString.year
-        const month = parseInt(queryString.month) - 1
-        const startDate = new Date(year, month - 1, 29); // 29 bulan yang diinput
-        const endDate = new Date(year, month, 28, 23, 59, 59, 999); // 28 bulan berikutnya full day
+        const startDate = this.convertWIBtoUTC(queryString.startDate, 0);
+        const endDate = this.convertWIBtoUTC(queryString.endDate, 23, 59, 59, 999);
 
         try {
             const updatePromises = data.map(async (item) => {
@@ -105,7 +103,7 @@ export default class PaymentCreditSalesRepository {
                             gte: startDate,
                             lte: endDate,
                         },
-                    }, 
+                    },
                     data: {
                         status: item.status
                     }
