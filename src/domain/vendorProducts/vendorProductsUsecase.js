@@ -32,7 +32,7 @@ export default class VendorProductsUsecase{
                 vendorId : item.vendorId,
                 name : item.name,
                 categoryId : item.categoryId,
-                sellPrice : (item.sellPrice + item.profitKsp),
+                sellPrice : item.sellPrice,
                 profitKsp : item.profitKsp
             }
         })
