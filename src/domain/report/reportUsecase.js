@@ -26,7 +26,7 @@ export default class ReportUsecase {
         })
         const newData = {
             total: await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
-            profit: await saleDetails.reduce((cur, item) => cur += parseInt((item.salePrice - item.purchasePrice) * quantity), 0),
+            profit: await saleDetails.reduce((cur, item) => cur += parseInt((item.salePrice - item.purchasePrice) * item.quantity), 0),
             data: data
         }
 
