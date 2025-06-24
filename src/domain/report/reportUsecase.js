@@ -24,12 +24,10 @@ export default class ReportUsecase {
                 details: details
             }
         })
-
-        console.log(saleDetails)
         const newData = {
-            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
-            profit : await saleDetails.reduce((cur, item) => cur += parseInt(item.salePrice - item.purchasePrice), 0),
-            data : data
+            total: await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            profit: await saleDetails.reduce((cur, item) => cur += parseInt(item.salePrice - item.purchasePrice), 0),
+            data: data
         }
 
         return newData
@@ -51,8 +49,8 @@ export default class ReportUsecase {
         })
 
         const newData = {
-            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
-            data : data
+            total: await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            data: data
         }
 
         return newData
@@ -61,6 +59,7 @@ export default class ReportUsecase {
     async getAllCredits(queryString) {
         const { creditSale, creditVendorSale } = await this.reportRepository.getAllCredits(queryString)
         const combined = [...creditSale, ...creditVendorSale]
+        console.log(combined)
         function accumulatePayments(data) {
             const result = [];
 
@@ -72,6 +71,7 @@ export default class ReportUsecase {
                 if (existing) {
                     // If record exists, accumulate payment
                     existing.paymentTotal += item.paymentTotal;
+                    existing.details.push(item.sale?.details || item.vendorSale?.details || [])
                 } else {
                     // If record doesn't exist, create a new record
                     result.push({
@@ -81,38 +81,75 @@ export default class ReportUsecase {
                         bank: item.member.bank,
                         accountNumber: item.member.accountNumber,
                         paymentTotal: item.paymentTotal,
-                        status: item.status === "cicilan" ? "piutang" : "lunas"
+                        status: item.status === "cicilan" ? "piutang" : "lunas",
+                        details: item.sale?.details || item.vendorSale?.details || []
                     });
+
                 }
             });
 
             return result;
         }
         const data = accumulatePayments(combined)
-        return data
+        const newData = data.map((item) => {
+            return {
+                id: item.id, // Generate new ID
+                nip: item.nip,
+                name: item.name,
+                bank: item.bank,
+                accountNumber: item.accountNumber,
+                paymentTotal: item.paymentTotal,
+                status: item.status,
+                details: item.details.flat(2).map((item, i) => {
+                    return {
+                        id: i,
+                        name: item.product?.name || item.vendorProduct?.name,
+                        salePrice: item.salePrice,
+                        quantity: item.quantity,
+                        subTotal: item.salePrice * item.quantity
+                    }
+                }).reduce((acc, curr) => {
+                    // Cek apakah sudah ada item dengan nama & harga yang sama persis
+                    const existing = acc.find(
+                        item => item.name === curr.name && item.salePrice === curr.salePrice
+                    );
+
+                    if (existing) {
+                        existing.quantity += curr.quantity;
+                        existing.subTotal += curr.subTotal;
+                    } else {
+                        acc.push({ ...curr }); // Tambahkan data baru jika belum ada
+                    }
+
+                    return acc;
+                }, [])
+            }
+        })
+
+        return newData
     }
 
     async getAllVendorSales(queryString) {
-      const { vendorSale , vendorSaleDetail } = await this.reportRepository.getAllVendorSales(queryString)
-      const data = vendorSale.map(item => {
-        const details = vendorSaleDetail.filter(detail => detail.vendorSaleId === item.id)
-        return {
-            id: item.id,
-            saleDate: toWIB(item.saleDate),
-            nip: item.nip,
-            name: item.member.name,
-            paymentMetode: item.paymentMetode,
-            paymentStatus: item.paymentStatus,
-            totalAmount: item.totalAmount,
-            profitKsp : item.profitKsp,
-            details: details
-        }
-    })
+        const { vendorSale, vendorSaleDetail } = await this.reportRepository.getAllVendorSales(queryString)
+        const data = vendorSale.map(item => {
+            const details = vendorSaleDetail.filter(detail => detail.vendorSaleId === item.id)
+            return {
+                id: item.id,
+                saleDate: toWIB(item.saleDate),
+                nip: item.nip,
+                name: item.member.name,
+                paymentMetode: item.paymentMetode,
+                paymentStatus: item.paymentStatus,
+                totalAmount: item.totalAmount,
+                profitKsp: item.profitKsp,
+                details: details
+            }
+        })
 
-    const newData = {
-            total : await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
-            profit : await data.reduce((cur, item) => cur += parseInt(item.profitKsp), 0),
-            data : data
+        const newData = {
+            total: await data.reduce((cur, item) => cur += parseInt(item.totalAmount), 0),
+            profit: await data.reduce((cur, item) => cur += parseInt(item.profitKsp), 0),
+            data: data
         }
 
         return newData
@@ -125,14 +162,14 @@ export default class ReportUsecase {
     async getAllPaymentVendors(queryString) {
         const { payment, vendor } = await this.reportRepository.getAllPaymentVendors(queryString)
 
-        const data = payment.map( item => {
-            const name = vendor.find( i => i.id === item.vendorId)
+        const data = payment.map(item => {
+            const name = vendor.find(i => i.id === item.vendorId)
             return {
-                id : item.id,
-                date : toWIB(item.paymentDate),
-                name : name.name,
-                total : item.paymentTotal,
-                status : item.status
+                id: item.id,
+                date: toWIB(item.paymentDate),
+                name: name.name,
+                total: item.paymentTotal,
+                status: item.status
             }
         })
 

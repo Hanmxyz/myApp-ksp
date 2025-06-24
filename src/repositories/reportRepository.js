@@ -103,7 +103,16 @@ export default class ReportRepository {
                     }
                 },
                 include: {
-                    member: true
+                    member: true,
+                    sale: {
+                        include : {
+                            details : {
+                                include : {
+                                    product : true
+                                }
+                            }
+                        }
+                    }
                 }
             })
 
@@ -115,7 +124,16 @@ export default class ReportRepository {
                     }
                 },
                 include: {
-                    member: true
+                    member: true,
+                    vendorSale: {
+                        include : {
+                            details : {
+                                include : {
+                                    vendorProduct : true
+                                }
+                            }
+                        }
+                    }
                 }
             })
             return { creditSale, creditVendorSale }

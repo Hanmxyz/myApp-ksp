@@ -53,7 +53,7 @@ export default class SalesUsecase {
 
         for (const product of data.product) {
             const firstOption = await getStockOnProduct.find(item => item.id === product.productId)
-            console.log(firstOption)
+            // console.log(firstOption)
             const firstResult = firstOption.stock - product.quantity
 
 
@@ -92,8 +92,8 @@ export default class SalesUsecase {
             }
         }
 
-        console.log(updateProducts)
-        console.log(updateStocks)
+        // console.log(updateProducts)
+        // console.log(updateStocks)
 
         // //update stock on stock
         // const updateStockPromise = (updateStocks.flat()).map(async (p) => {
