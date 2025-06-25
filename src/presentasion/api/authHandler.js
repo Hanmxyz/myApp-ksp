@@ -14,6 +14,9 @@ export default class AuthHandler {
             const { username, password } = req.body
             const user = await this.authUsecase.login(username)
             const passwordValid = await verifyPassword(password, user.password)
+            if (passwordValid === false) {
+                throw new Error("password salah")
+            }
 
             const isProduction = process.env.NODE_ENV === "production"
 
