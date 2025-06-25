@@ -59,7 +59,6 @@ export default class ReportUsecase {
     async getAllCredits(queryString) {
         const { creditSale, creditVendorSale } = await this.reportRepository.getAllCredits(queryString)
         const combined = [...creditSale, ...creditVendorSale]
-        console.log(combined)
         function accumulatePayments(data) {
             const result = [];
 
@@ -103,6 +102,7 @@ export default class ReportUsecase {
                 details: item.details.flat(2).map((item, i) => {
                     return {
                         id: i,
+                        date : new Date(item.createdAt).toISOString().split("T")[0],
                         name: item.product?.name || item.vendorProduct?.name,
                         salePrice: item.salePrice,
                         quantity: item.quantity,
@@ -111,10 +111,10 @@ export default class ReportUsecase {
                 }).reduce((acc, curr) => {
                     // Cek apakah sudah ada item dengan nama & harga yang sama persis
                     const existing = acc.find(
-                        item => item.name === curr.name && item.salePrice === curr.salePrice
+                        item => item.name === curr.name && item.salePrice === curr.salePrice && item.createdAt === curr.createdAt
                     );
 
-                    if (existing) {
+                    if (existing ) {
                         existing.quantity += curr.quantity;
                         existing.subTotal += curr.subTotal;
                     } else {
@@ -135,7 +135,7 @@ export default class ReportUsecase {
             const details = vendorSaleDetail.filter(detail => detail.vendorSaleId === item.id)
             return {
                 id: item.id,
-                saleDate: toWIB(item.saleDate),
+                saleDate: new Date(toWIB(item.transactionDate)).toISOString().split("T")[0],
                 nip: item.nip,
                 name: item.member.name,
                 paymentMetode: item.paymentMetode,
@@ -151,7 +151,6 @@ export default class ReportUsecase {
             profit: await data.reduce((cur, item) => cur += parseInt(item.profitKsp), 0),
             data: data
         }
-
         return newData
     }
 
