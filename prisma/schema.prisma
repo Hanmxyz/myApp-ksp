@@ -18,6 +18,25 @@ enum Status {
   NO
 }
 
+enum TypeTx {
+  saving
+  loan
+  loan_repayment
+  withdrawal
+  sale
+}
+
+enum LoanStatus {
+  accepted
+  rejected
+
+}
+
+enum SavingType {
+  basic  
+  mandatory    
+}
+
 enum PaymentType {
   cash
   transfer
@@ -62,6 +81,10 @@ model User {
 
   staffs   Staff[]
   sales    Sale[]
+  slSettings         SavingsLoansSetting[]
+  dueDateSetting     DueDateSetting[]
+  loanRequests  LoanRequest[]
+  loans  Loan[]
 
   @@map("users")
 }
@@ -132,6 +155,11 @@ model Member {
   creditSales     PaymentCreditSale[]
   vendorCreditSales PaymentCreditVendorSale[]
   userMobiles     UserMobile[]
+  loanRequests    LoanRequest[]
+  loans           Loan[]
+  savings         Saving[]
+  voluntarySS     VoluntarySavingSetting[]
+  allTx           AllTransaction[]
 
   @@map("members")
 }
@@ -257,6 +285,8 @@ model Sale {
   userId        Int                 @map("user_id")          
   details       SaleDetail[]
   credit        PaymentCreditSale[]
+  allTx         AllTransaction[]
+
   member        Member              @relation(fields: [nip], references: [nip])
   user          User                @relation(fields: [userId], references: [id])
 
@@ -387,3 +417,138 @@ model OperationalCost {
 }
 
 
+
+model SavingsLoansSetting {
+  year              Int       @id @map("id")
+  shuSaving         Int       @map("shu_saving")
+  basicSaving       Int       @map("basic_saving")
+  mandatorySaving   Int       @map("mandatory_saving")
+  memberLoanIR      Float     @map("member_loan_interest_rate")
+  managementLoanIR  Float     @map("management_loan_interest_rate")
+  isActive          Status    @map("is_active")
+  userId            Int       @map("user_id")
+
+  user              User      @relation(fields: [userId], references : [id])  
+  @@map("savings_loans_settings") 
+}
+
+
+model DueDateSetting  {
+  id                Int       @id @default(autoincrement()) @map("id")
+  year              Int       @map("year")
+  userId            Int       @map("user_id")
+
+  ddsDetail         dueDateSettingDetail[]
+  user              User      @relation(fields: [userId], references : [id])  
+  @@map("due_date_settings") 
+}
+
+model dueDateSettingDetail {
+   id                Int       @id @default(autoincrement()) @map("id")
+   dueDateId         Int       @map("due_date_id")
+   month             Int       @map("month")
+   date              Int       @map("date")
+   lateFee           Int       @map("late_fee")
+   isActive         Status     @default(YES) @map("is_active")
+
+   dueDate          DueDateSetting  @relation(fields: [dueDateId], references : [id])
+}
+
+model LoanRequest {
+  id          Int           @id @default(autoincrement()) @map("id")
+  nip         String        @db.VarChar(20) @map("nip")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  loanTerm    Int           @map("loan_term")
+  loanAmount  Float         @map("loan_amount")
+  status      LoanStatus?   @map("status")
+  description String?       @db.VarChar(200) @map("description")
+  userId      Int           @map("user_id")
+
+  user        User          @relation(fields: [userId], references : [id])  
+  member      Member        @relation(fields: [nip], references: [nip])
+
+  @@map("loan_requests")
+}
+
+
+model Loan {
+  id          Int           @id @default(autoincrement()) @map("id")
+  year        Int           @map("year")
+  nip         String        @db.VarChar(20) @map("nip")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  loanAmount  Float         @map("loan_amount")
+  loanTerm    Int           @map("loan_term")
+  monthlyPayment   Float    @map("monthly_payment")
+  isPaid      PaymentStatus @default(belum_lunas) @map("is_paid")
+  userId      Int           @map("user_id")
+
+  user        User          @relation(fields: [userId], references : [id])  
+  member      Member        @relation(fields: [nip], references: [nip])
+
+  loanRepayments LoanRepayment[] 
+
+  @@map("loans")
+}
+
+model LoanRepayment {
+  id            Int           @id @default(autoincrement()) @map("id")
+  loanId        Int           @map("loan_id")
+  paymentDate   DateTime      @default(now()) @map("payment_date")
+  paymentAmount Float         @map("payment_amount")
+  penalty       Status        @default(YES) @map("penalty")
+  daysLate      Int           @map("days_late")
+
+  loan          Loan          @relation(fields: [loanId], references : [id])
+
+  @@map("loan_repayments")
+}
+
+model Saving {
+  id            Int           @id @default(autoincrement()) @map("id")
+  year          Int           @map("year")
+  nip           String        @db.VarChar(20) @map("nip")
+  date          DateTime      @default(now()) @map("date")
+  amount        Float         @map("amount")
+  type          SavingType    @map("type")
+
+  member        Member        @relation(fields: [nip], references: [nip])
+
+  @@map("savings")
+}
+
+model VoluntarySavingSetting {
+  id            Int           @id @default(autoincrement()) @map("id")
+  nip           String        @db.VarChar(20) @map("nip")
+  year          Int           @map("year")
+  amount        Float         @map("amount")
+  isActive      Status        @map("is_active")
+
+  member        Member        @relation(fields: [nip], references: [nip])
+
+  VoluntarySP   VoluntarySavingPayment[]
+
+  @@map("voluntary_saving_settings")
+}
+
+model VoluntarySavingPayment {
+  id             Int           @id @default(autoincrement()) @map("id")
+  VoluntarySsId  Int           @map("voluntary_saving_setting_id")
+  amountPaid     Float         @map("amount_paid")
+  paymentDate    DateTime      @map("payment_date")
+  isPaid         Status        @map("is_paid")
+
+  voluntarySS    VoluntarySavingSetting @relation(fields : [VoluntarySsId], references: [id])
+}
+
+
+model AllTransaction {
+  id            Int           @id @default(autoincrement()) @map("id")
+  nip           String        @db.VarChar(20) @map("nip")
+  typeTx        TypeTx?       @map("type_tx") 
+  totalAmount   Float?        @map("total_amount")
+  createdAt     DateTime?     @map("created_at")
+  saleId        Int?          @map("sale_id")
+
+  member        Member        @relation(fields: [nip], references: [nip])
+  sale          Sale?         @relation(fields: [saleId], references: [id])
+}
