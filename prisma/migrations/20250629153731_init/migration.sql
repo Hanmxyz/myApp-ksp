@@ -313,6 +313,131 @@ CREATE TABLE `operational_costs` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `savings_loans_settings` (
+    `id` INTEGER NOT NULL,
+    `shu_saving` INTEGER NOT NULL,
+    `basic_saving` INTEGER NOT NULL,
+    `mandatory_saving` INTEGER NOT NULL,
+    `member_loan_interest_rate` DOUBLE NOT NULL,
+    `management_loan_interest_rate` DOUBLE NOT NULL,
+    `is_active` ENUM('YES', 'NO') NOT NULL,
+    `user_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `due_date_settings` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `year` INTEGER NOT NULL,
+    `month_1` INTEGER NOT NULL,
+    `month_2` INTEGER NOT NULL,
+    `month_3` INTEGER NOT NULL,
+    `month_4` INTEGER NOT NULL,
+    `month_5` INTEGER NOT NULL,
+    `month_6` INTEGER NOT NULL,
+    `month_7` INTEGER NOT NULL,
+    `month_8` INTEGER NOT NULL,
+    `month_9` INTEGER NOT NULL,
+    `month_10` INTEGER NOT NULL,
+    `month_11` INTEGER NOT NULL,
+    `month_12` INTEGER NOT NULL,
+    `date` INTEGER NOT NULL,
+    `late_fee` INTEGER NOT NULL,
+    `is_active` ENUM('YES', 'NO') NOT NULL,
+    `user_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `loan_requests` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nip` VARCHAR(20) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `loan_term` INTEGER NOT NULL,
+    `loan_amount` DOUBLE NOT NULL,
+    `status` ENUM('accepted', 'rejected') NULL,
+    `description` VARCHAR(200) NULL,
+    `user_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `loans` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `year` INTEGER NOT NULL,
+    `nip` VARCHAR(20) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `loan_amount` DOUBLE NOT NULL,
+    `loan_term` INTEGER NOT NULL,
+    `monthly_payment` DOUBLE NOT NULL,
+    `is_paid` ENUM('lunas', 'belum_lunas') NOT NULL DEFAULT 'belum_lunas',
+    `user_id` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `loan_repayments` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `loan_id` INTEGER NOT NULL,
+    `payment_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `payment_amount` DOUBLE NOT NULL,
+    `penalty` ENUM('YES', 'NO') NOT NULL DEFAULT 'YES',
+    `days_late` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `savings` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `year` INTEGER NOT NULL,
+    `nip` VARCHAR(20) NOT NULL,
+    `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `amount` DOUBLE NOT NULL,
+    `type` ENUM('basic', 'mandatory') NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `voluntary_saving_settings` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nip` VARCHAR(20) NOT NULL,
+    `year` INTEGER NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `is_active` ENUM('YES', 'NO') NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `VoluntarySavingPayment` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `voluntary_saving_setting_id` INTEGER NOT NULL,
+    `amount_paid` DOUBLE NOT NULL,
+    `payment_date` DATETIME(3) NOT NULL,
+    `is_paid` ENUM('YES', 'NO') NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `AllTransaction` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `nip` VARCHAR(20) NOT NULL,
+    `type_tx` ENUM('saving', 'loan', 'loan_repayment', 'withdrawal', 'sale') NULL,
+    `total_amount` DOUBLE NULL,
+    `created_at` DATETIME(3) NULL,
+    `sale_id` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -384,3 +509,39 @@ ALTER TABLE `payment_credit_vendor_sales` ADD CONSTRAINT `payment_credit_vendor_
 
 -- AddForeignKey
 ALTER TABLE `payment_credit_vendor_sales` ADD CONSTRAINT `payment_credit_vendor_sales_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `savings_loans_settings` ADD CONSTRAINT `savings_loans_settings_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `due_date_settings` ADD CONSTRAINT `due_date_settings_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `loan_requests` ADD CONSTRAINT `loan_requests_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `loan_requests` ADD CONSTRAINT `loan_requests_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `loans` ADD CONSTRAINT `loans_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `loans` ADD CONSTRAINT `loans_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `loan_repayments` ADD CONSTRAINT `loan_repayments_loan_id_fkey` FOREIGN KEY (`loan_id`) REFERENCES `loans`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `savings` ADD CONSTRAINT `savings_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `voluntary_saving_settings` ADD CONSTRAINT `voluntary_saving_settings_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `VoluntarySavingPayment` ADD CONSTRAINT `VoluntarySavingPayment_voluntary_saving_setting_id_fkey` FOREIGN KEY (`voluntary_saving_setting_id`) REFERENCES `voluntary_saving_settings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AllTransaction` ADD CONSTRAINT `AllTransaction_nip_fkey` FOREIGN KEY (`nip`) REFERENCES `members`(`nip`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AllTransaction` ADD CONSTRAINT `AllTransaction_sale_id_fkey` FOREIGN KEY (`sale_id`) REFERENCES `sales`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

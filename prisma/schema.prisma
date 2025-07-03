@@ -452,6 +452,7 @@ model dueDateSettingDetail {
    isActive         Status     @default(YES) @map("is_active")
 
    dueDate          DueDateSetting  @relation(fields: [dueDateId], references : [id])
+   @@map("due_date_setting_detail")
 }
 
 model LoanRequest {

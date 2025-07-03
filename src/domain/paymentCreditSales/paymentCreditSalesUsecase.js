@@ -57,8 +57,6 @@ export default class PaymentCreditSalesUsecase{
         return newData
     }
 
-
-
     async updateCreditMember(total,nip) {
         const nominal = total.nominal
         const data = await this.paymentCreditSaleRepository.getCreditMemberByNip(nip)

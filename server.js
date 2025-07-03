@@ -20,6 +20,9 @@ import operationalCostRouter from "./src/router/operationalCostsRouter.js"
 import reportRouter from "./src/router/reportRouter.js"
 import authRouter from "./src/router/authRouter.js"
 import notifRouter from "./src/router/notifRouter.js"
+import savingsLoansRouter from "./src/router/savingsLoansRouter.js"
+import loanRequestRouter from "./src/router/loanRequestRouter.js"
+import dueDateRouter from "./src/router/dueDatesRouter.js"
 import { PrismaClient } from "@prisma/client"
 import cookieParser from 'cookie-parser';
 import * as env from "dotenv"
@@ -28,7 +31,7 @@ import AuthMiddleware from "./src/presentasion/api/authMiddleware.js"
 
 env.config()
 const allowedOrigins = process.env.FE_SITE.split(",").map(origin =>
-    origin.trim().replace(/\/$/, "") // hapus trailing slash
+    origin.trim().replace(/\/$/, "") 
 );
 
 const prisma = new PrismaClient();
@@ -54,6 +57,10 @@ app.use(
     })
 );
 app.use("/auth", authRouter)
+
+app.use("/api", savingsLoansRouter)
+app.use("/api", loanRequestRouter)
+app.use("/api" , dueDateRouter)
 
 app.use(AuthMiddleware)
 
